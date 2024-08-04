@@ -1,0 +1,91 @@
+image nosql tables vs imdb-api responses 
+
+1. comments : no
+2. Ratings : no ratings ( add custom )
+3. Movie info :
+    from /title : 
+    
+    titleText
+    releaseYear
+    releaseDate
+        country
+    runtime 
+    metacritic 
+        metascore 
+    genres 
+        genres[]
+    plot
+        plotText
+            plainText
+        language
+    reviews 
+    criticReviews
+    cast
+        edges[]
+            :index
+                node
+                    name
+                        id
+                        nameText
+                            text
+                        primaryImage
+                            url
+                            width 
+                            height
+                    
+    directors[]
+        :index
+            credits[]
+                :index
+                    name
+                        nameText
+                            text
+
+    countriesOfOrigin
+        countries[]
+            :index
+                text
+    production
+        edges[]
+            :index
+                node
+                    company
+                        companyText
+                            text
+    productionBudget
+        budget
+            amount
+            currency
+    
+
+4. Trailer Gallery
+    obtain the video id from /title endpoint 
+    
+    videoStrip
+        edges[]
+            :index
+                node
+                    id 
+                    thumbnail
+                        height
+                        url 
+                        width
+    
+    then use then video id and fetch video info from /video
+
+5. Artists
+    obtain all the artist id from /tilte
+    then fetch each id from /name
+    this also includes directors 
+
+6. Cast
+    obatain all the artist id from /title
+    then fetch each id from /name
+    no directors
+
+7. Reviews
+    obtain the reviews from /title
+
+8. Analytics Data
+    obtain the analytics data from /title
+            

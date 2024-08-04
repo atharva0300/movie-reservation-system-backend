@@ -1,0 +1,11 @@
+sql tables vs imdb api 
+
+1. place : no 
+2. theater : no 
+3. screen : no 
+4. tier : no 
+5. seats : no 
+6. movie : no 
+7. offers : no 
+8. tickets : no
+9. user : no 
