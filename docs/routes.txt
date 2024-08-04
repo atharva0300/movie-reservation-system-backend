@@ -1,0 +1,133 @@
+# User Authentication
+POST /api/auth/register      - Register a new user
+POST /api/auth/login         - Authenticate user and get token
+POST /api/auth/refresh-token - Refresh JWT token
+
+# User Management
+GET /api/users               - Get all users (Admin only)
+GET /api/users/:id           - Get user by ID (Admin only)
+PUT /api/users/:id           - Update user details (Admin only)
+DELETE /api/users/:id        - Delete user (Admin only)
+
+# Movie Management
+GET /api/movies              - Get all movies
+POST /api/movies             - Add a new movie (Admin only)
+GET /api/movies/:id          - Get movie details by ID
+PUT /api/movies/:id          - Update movie details (Admin only)
+DELETE /api/movies/:id       - Delete movie (Admin only)
+
+# Theater Management
+GET /api/theaters            - Get all theaters
+POST /api/theaters           - Add a new theater (Admin only)
+GET /api/theaters/:id        - Get theater details by ID
+PUT /api/theaters/:id        - Update theater details (Admin only)
+DELETE /api/theaters/:id     - Delete theater (Admin only)
+
+# Screen Management
+GET /api/screens             - Get all screens
+POST /api/screens            - Add a new screen (Admin only)
+GET /api/screens/:id         - Get screen details by ID
+PUT /api/screens/:id         - Update screen details (Admin only)
+DELETE /api/screens/:id      - Delete screen (Admin only)
+
+# Seat Management
+GET /api/seats               - Get all seats
+POST /api/seats              - Add new seats (Admin only)
+GET /api/seats/:id           - Get seat details by ID
+PUT /api/seats/:id           - Update seat details (Admin only)
+DELETE /api/seats/:id        - Delete seat (Admin only)
+
+# Ticket Management
+POST /api/tickets            - Book a new ticket
+GET /api/tickets/:id         - Get ticket details by ID
+PUT /api/tickets/:id         - Update ticket details
+DELETE /api/tickets/:id      - Cancel ticket
+
+# Offers Management
+GET /api/offers              - Get all offers
+POST /api/offers             - Add a new offer (Admin only)
+GET /api/offers/:id          - Get offer details by ID
+PUT /api/offers/:id          - Update offer details (Admin only)
+DELETE /api/offers/:id       - Delete offer (Admin only)
+
+# Search Functionality
+GET /api/search/movies       - Search movies by name, genre, actor
+GET /api/search/theaters     - Search theaters by name, area
+GET /api/search/actors       - Search actors by name
+
+# Comments
+GET /api/comments            - Get all comments
+POST /api/comments           - Add a new comment
+GET /api/comments/:id        - Get comment details by ID
+PUT /api/comments/:id        - Update comment
+DELETE /api/comments/:id     - Delete comment
+
+# Ratings
+GET /api/ratings             - Get all ratings
+POST /api/ratings            - Add a new rating
+GET /api/ratings/:id         - Get rating details by ID
+PUT /api/ratings/:id         - Update rating
+DELETE /api/ratings/:id      - Delete rating
+
+# Movie Info
+GET /api/movie-info          - Get movie information
+POST /api/movie-info         - Add movie information
+GET /api/movie-info/:id      - Get movie info details by ID
+PUT /api/movie-info/:id      - Update movie information
+DELETE /api/movie-info/:id   - Delete movie information
+
+# Trailers
+GET /api/trailers            - Get all movie trailers
+POST /api/trailers           - Add a new trailer
+GET /api/trailers/:id        - Get trailer details by ID
+PUT /api/trailers/:id        - Update trailer
+DELETE /api/trailers/:id     - Delete trailer
+
+# Artists
+GET /api/artists             - Get all artists
+POST /api/artists            - Add a new artist
+GET /api/artists/:id         - Get artist details by ID
+PUT /api/artists/:id         - Update artist details
+DELETE /api/artists/:id      - Delete artist
+
+# Cast
+GET /api/cast                - Get all cast members
+POST /api/cast               - Add a new cast member
+GET /api/cast/:id            - Get cast member details by ID
+PUT /api/cast/:id            - Update cast member details
+DELETE /api/cast/:id         - Delete cast member
+
+# Reviews
+GET /api/reviews             - Get all reviews
+POST /api/reviews            - Add a new review
+GET /api/reviews/:id         - Get review details by ID
+PUT /api/reviews/:id         - Update review
+DELETE /api/reviews/:id      - Delete review
+
+# Analytics Data
+GET /api/analytics           - Get analytics data
+POST /api/analytics          - Add new analytics data
+GET /api/analytics/:id       - Get analytics data by ID
+PUT /api/analytics/:id       - Update analytics data
+DELETE /api/analytics/:id    - Delete analytics data
+
+# Notification Service
+POST /api/notifications/email - Send email notifications
+POST /api/notifications/sms   - Send SMS notifications
+
+# Movie Trailers (Embedding YouTube Trailers)
+GET /api/movies/:id/trailer   - Get embedded YouTube trailer for a movie
+
+# Listing Own Shows
+GET /api/shows                - List own shows
+POST /api/shows               - Add a new show
+GET /api/shows/:id            - Get show details by ID
+PUT /api/shows/:id            - Update show details
+DELETE /api/shows/:id         - Delete show
+
+# Directions (Embedding Maps)
+GET /api/theaters/:id/directions - Get embedded map directions for a theater
+
+# Seat Selection and Booking
+POST /api/seats/selection     - Select seats
+POST /api/seats/booking       - Confirm and book selected seats
