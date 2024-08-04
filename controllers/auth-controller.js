@@ -1,6 +1,5 @@
 const express = require('express')
 const createPath = require('../shared/createPath')
-const {Client : pgClient} = require('pg')
 
 const authRegisterController = async (req , res) => {
     console.log('inside auth register controller')
