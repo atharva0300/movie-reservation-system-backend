@@ -32,6 +32,18 @@ const createPath = (pathObject) => {
             newPath = `${URL}${searchPort}${reqPath}?q=${query}`;
             break;
 
+        case 'slots' : 
+            const showTimePort = process.env.SHOWTIME_PORT
+            if(!showTimePort) throw new Error('SHOW_TIME PORT is not defined')
+            newPath = `${URL}${showTimePort}${reqPath}?q=${query}`;
+            break;
+        
+        case 'booking' : 
+            const bookingPort = process.env.BOOKING_PORT
+            if(!bookingPort) throw new Error('BOOKING_PORT is not defined')
+            newPath = `${URL}${bookingPort}${reqPath}`;
+            break;
+
         default:
             throw new Error('Invalid API type');
     }
