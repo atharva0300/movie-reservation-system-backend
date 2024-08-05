@@ -14,7 +14,8 @@ app.get('/' , getAllMovies)
 
 app.post('/' , insertSingleMovie)
 
-app.post('/:id' , getSingleMovie)
+app.get('/:id' , getSingleMovie)
+
 
 
 

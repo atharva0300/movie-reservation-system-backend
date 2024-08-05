@@ -5,20 +5,29 @@ const { MongoClient } = require('mongodb')
 dotenv.config({path : path.resolve(__dirname , '../../.env')})
 
 const mongoClient = new MongoClient(process.env.MONGO_URI.toString())
-mongoClient.connect()
-const database = mongoClient.db('movie-reservation-system')
+
 
 const getSingleMovie = async(req , res) => {
-    const {titleid} = req.body
-    try{
-        const movieInfoCollection = database.collection('movie_info')
-        const movie = await movieInfoCollection.findOne({titleid : titleid})
-        // const cast = await database.collection('cast').findOne({movieid : titleid})
-        // const review = await database.collection('review').findOne({movieid : titleid})
-        if(result){
-            return res.status(200).json({message : 'movie found' , data : JSON.stringify(movie)})
+    console.log('inside get single movie')
+    const {id : titleid } = req.params 
+    console.log('titleid : '  , titleid)
+    if(titleid == undefined){
+        return res.status(400).json({message : 'invalid titleid'})
+    }
+    try{   
+        await mongoClient.connect()
+        const db = mongoClient.db('movie-reservation-system')
+        const movie = await db.collection('movie_info').findOne({id : titleid})
+        const cast = await db.collection('cast').findOne({movieId : titleid})
+        const review = await db.collection('review').findOne({movieId : titleid})
+        const director = await db.collection('director').findOne({movieId : titleid})
+        const genre = await db.collection('genre').findOne({movieId : titleid})
+        const trailer_gallery = await db.collection('trailer_gallery').findOne({movieId : titleid})
+        const sendingObj  = {movie, cast , review , director , genre , trailer_gallery }
+        if(movie){
+            return res.status(200).json({message : 'movie found' , data : JSON.stringify(sendingObj)})
         }else{
-            return res.status(400).json({message : 'movie not found' , data : JSON.stringify(movie)})
+            return res.status(400).json({message : 'movie not found' , data : JSON.stringify({})})
         }
     }catch(err){
         return res.status(500).json({message : 'getSingleMovie error'})
@@ -28,6 +37,7 @@ const getSingleMovie = async(req , res) => {
 const insertSingleMovie = async(req , res) => {
     const {movieInfoObject} = req.body
     try{
+        /*
         const movieInfoCollection = database.collection('movie_info')
         const result = await movieInfoCollection.insertOne(movieInfoObject)
         if(result){
@@ -35,6 +45,7 @@ const insertSingleMovie = async(req , res) => {
         }else{
             return res.status(400).json({message : 'failed to insert movie' , data : JSON.stringify(result)})
         }
+            */
     }catch(err){
         return res.status(500).json({message : 'getSingleMovie error'})
     }
@@ -43,6 +54,7 @@ const insertSingleMovie = async(req , res) => {
 const getAllMovies = async(req , res) => {
     console.log('inside getAllMovies')
     try{
+        /*
         const movieInfoCollection = database.collection('movie_info')
         movieInfoCollection.find().toArray().then((result) => {
             console.log('result : ' , result)
@@ -50,6 +62,7 @@ const getAllMovies = async(req , res) => {
         }).catch((err) => {
             return res.status(400).json({message : 'movie not found' , data : JSON.stringify({})})
         })
+            */
     }catch(err){
         return res.status(500).json({message : 'getAllMovies error'})
     }

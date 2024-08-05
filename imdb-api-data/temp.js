@@ -131,4 +131,15 @@ const makeReq = async(req , res) => {
     }
 }
 
-makeReq()
+async function makeDummyReq(){
+  await mongoClient.connect()
+  db = mongoClient.db('movie-reservation-system')
+  const movieCollection = db.collection('movie_info')
+  const result = await movieCollection.find({}).toArray()
+  console.log('result : ' , result)
+  mongoClient.close()
+}
+
+makeDummyReq()
+
+// makeReq()

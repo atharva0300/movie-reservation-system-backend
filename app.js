@@ -23,6 +23,7 @@ app.use(express.urlencoded({extended : false}))
 // routes 
 app.use('/api/auth/' , require('./routes/auth-route'))
 app.use('/api/movies/' , require('./routes/movie-route'))
+app.use('/api/search' , require('./routes/search-route'))
 
 
 

@@ -50,3 +50,11 @@ movie-reservation-system/
 ├── package-lock.json
 ├── docker-compose.yml
 └── README.md
+
+## Things to be done 
+1. Distributed NoSQL database for each microservice 
+2. Establish communication between microservices usung event driven architecture 
+3. Populate SQL database -> done
+4. Finish writing all controller logic 
+5. Setup Notification serivce
+6. Eastablish a custom logger
