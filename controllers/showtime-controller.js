@@ -3,6 +3,9 @@ const createPath = require('../shared/createPath');
 
 const apiType = 'slots'
 
+// logger 
+const { logger : customLogger} = require('../logs/logger/logger.config')
+
 const slotTheaterController = async(req , res) => {
     console.log('inside slotTheaterController')
     const theaterName = req.query.q;
@@ -24,10 +27,11 @@ const slotTheaterController = async(req , res) => {
         })
         const data = await response.json()
         console.log('data : '  , data)
-
+        customLogger.info(`slow theater successful : ${response.status}` , 'server')
         return res.status(200).json({message : 'works' , data})
     }catch(err){
         console.log(err)
+        customLogger.error(err , 'server')
         return res.status(500).json({message : 'slot Theater Controller in main server error'})
     }
 }
@@ -54,10 +58,11 @@ const slotMovieController = async(req , res) => {
         })
         const data = await response.json()
         console.log('data : '  , data)
-
+        customLogger.info(`slot movie successful ${response.status}` , 'server')
         return res.status(200).json({message : 'works' , data})
     }catch(err){
         console.log(err)
+        customLogger.error(err , 'server')
         return res.status(500).json({message : 'slot Theater Controller in main server error'})
     }
 }

@@ -3,6 +3,9 @@ const createPath = require('../shared/createPath')
 
 const apiType = 'booking'
 
+// logger
+const {logger : customLogger} = require('../logs/logger/logger.config')
+
 const bookBulkTicketController = async(req , res) => {
     console.log('inside bookBuldTicketController')
     console.log(req.body)
@@ -22,10 +25,11 @@ const bookBulkTicketController = async(req , res) => {
         })
         const data = await response.json();
         console.log('data : ' , data)
-
+        customLogger.info('booking fetched' , 'server')
         return res.status(response.status).json({message : data?.message})
     }catch(err){
         console.log(err)
+        customLogger.error(err , 'server')
         return res.status(500).json({message : 'boolBulkTicketController Error'})
     }
 }  
