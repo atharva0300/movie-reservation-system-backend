@@ -1,0 +1,8 @@
+2024-08-07T12:21:22.617Z [INFO]: message.content true
+2024-08-07T12:21:25.597Z [INFO]: email sent
+2024-08-07T12:22:01.809Z [INFO]: message.content true
+2024-08-07T12:22:04.549Z [INFO]: message.content true
+2024-08-07T12:22:04.741Z [INFO]: email sent
+2024-08-07T12:22:04.752Z [INFO]: message consumed from queue : ack
+2024-08-07T12:22:07.323Z [INFO]: email sent
+2024-08-07T12:22:07.325Z [INFO]: message consumed from queue : ack

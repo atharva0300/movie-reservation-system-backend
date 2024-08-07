@@ -9,6 +9,7 @@ const AUTH_PORT = process.env.AUTH_PORT
 
 // controllers 
 const { register, login, refreshToken, logout } = require('./auth-controller')
+const { logger : customLogger } = require('../../logs/logger/logger.config')
 
 const app = express();
 
@@ -30,8 +31,11 @@ const authStarter = async() => {
             app.listen(AUTH_PORT , () => {
                 console.log('listening to PORT : ' , AUTH_PORT)
             })
+        }).catch(err => {
+            customLogger.error(err , 'auth')
         })
     }catch(err){
+        customLogger.error(err , 'auth')
         console.log('Auth Server starter failed : ' , err)
     }
 }

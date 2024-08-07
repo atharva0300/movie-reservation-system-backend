@@ -8,6 +8,9 @@ dotenv.config({path : path.resolve(__dirname , '../../.env')})
 const mongoClient = new MongoClient(process.env.MONGO_URI.toString())
 const pgPool = require('../../config/pgPoolConfig')
 
+// logger 
+const {logger : customLogger} = require('../../logs/logger/logger.config')
+
 const searchMovieController = async(req , res , next) => {
     const searchTerm = req.query.q
     console.log('search term : ' , searchTerm)
@@ -23,14 +26,18 @@ const searchMovieController = async(req , res , next) => {
                     movie,
                     searchFoundIn : 'movie_info'
                 }
-                return res.status(200).json({message : 'search found' , data : JSON.stringify(sendObj)})
+                customLogger.info('search found' , 'search')
+                return res.status(200).json({message : 'movie : search found' , data : JSON.stringify(sendObj)})
             }else{
+                customLogger.info('movie : search not found' , 'search')
                 next()
             }
         }).catch(err => {
+            customLogger.error(err , 'search')
             return res.status(500).json({message : 'movie read mongodb error' , data : JSON.stringify({})})
         })
     }catch(err){
+        customLogger.error(err , 'search')
         return res.status(500).json({message : 'searchMovie Error'})
     }
 }
@@ -48,14 +55,18 @@ const searchPlaceController = async(req , res , next) => {
                     place : result.rows,
                     searchFoundIn : 'place'
                 }
+                customLogger.info('place : search found' , 'search')
                 return res.status(200).json({message : 'search found' , data : JSON.stringify(sendObj)})
             }else{
+                customLogger.info('theater : search not found' , 'search')
                 next()
             }
         }).catch(err => {
+            customLogger.error(err , 'search')
             return res.status(500).json({message : 'place read postgres error' , data : JSON.stringify({})})
         })
     }catch(err){
+        customLogger.error(err , 'search')
         return res.status(500).json({message : 'searchPlace Error'})
     }
 }
@@ -72,15 +83,19 @@ const searchTheaterController = async(req , res) => {
                     theater : result.rows,
                     searchFoundIn : 'theaters'
                 }
+                customLogger.info('theater : search found', 'search')
                 return res.status(200).json({message : 'search found' , data : JSON.stringify(sendObj)})
             }else{
+                customLogger.info('theater : search not found' , 'search')
                 return res.status(400).json({message : 'search term not found' , data : JSON.stringify({})})
             }
         }).catch(err => {
+            customLogger.error(err , 'search')
             return res.status(500).json({message : 'theater read postgres error' , data : JSON.stringify({})})
         })
     }catch(err){
         console.log(err)
+        customLogger.error(err , 'search')
         return res.status(500).json({message : 'searchTheater Error'})
     }
 }

@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser')
 
 // pgclient 
 const pgPool = require('../../config/pgPoolConfig')
+const { logger : customLogger } = require('../../logs/logger/logger.config')
 
 const register = async(req , res) => {
     console.log('reqbody : ' , req.body)
@@ -14,6 +15,7 @@ const register = async(req , res) => {
     try{
         const existingUser = await pgPool.query('SELECT * FROM public."User" WHERE email = $1' , [email])
         if(existingUser.rowCount!=0){
+            customLogger.info(`User email already exists` , 'auth')
             return res.status(400).json({message : 'User already exists' , code : 'authCode1'})
         }
         const salt = await bcrypt.genSalt(10);
@@ -22,12 +24,14 @@ const register = async(req , res) => {
         try{
             // insert into User table ( SQL )
             await pgPool.query('INSERT INTO public."User" (email, password , name) VALUES ( $1 , $2 , $3 )' , [email , hashedPassword , name])
+            customLogger.info(`Inserted new user into table` , 'auth')
             res.status(201).json({message : 'User registered successully'})
         }catch(err){
+            customLogger.error(err , 'auth')
             res.status(500).json({message : 'DB error'})
         }
     }catch(err){
-        console.log('err : ' , err)
+        customLogger.error(err , 'auth')
         res.status(500).json({message : 'Auth Register server error'})
     }
 } 
@@ -47,18 +51,22 @@ const login = async(req , res) => {
             try{
                 // sign with jwt 
                 const access_token = jwt.sign(payLoad , process.env.SECRET_KEY , {expiresIn : '1h'})
+                customLogger.info('cookie set' , 'auth')
                 res.cookie('access_token' , access_token , {httpOnly : true})
                 return res.status(200).json({message : 'Login Successful'})
             }catch(err){
                 console.log('Error in signing jwt : ' , err)
+                customLogger.error(err , 'auth')
                 return res.status(500).json({message : "Error in signing jwt"})
             }
         }else{
+            customLogger.error(err , 'auth')
             return res.status(400).json({message : 'User does not exists' , 'code' : 'loginCode1'})
         }
 
     }catch(err){
         console.log('err : ' , err)
+        customLogger.error(err , 'auth')
         return res.status(500).json({message : 'auth Login server error'})
     }
 }

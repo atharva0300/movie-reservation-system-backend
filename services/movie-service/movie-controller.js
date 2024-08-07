@@ -6,12 +6,15 @@ dotenv.config({path : path.resolve(__dirname , '../../.env')})
 
 const mongoClient = new MongoClient(process.env.MONGO_URI.toString())
 
+const {logger : customLogger} = require('../../logs/logger/logger.config')
+
 
 const getSingleMovie = async(req , res) => {
     console.log('inside get single movie')
     const {id : titleid } = req.params 
     console.log('titleid : '  , titleid)
     if(titleid == undefined){
+        customLogger.error('titleid is undefined' ,  'movie')
         return res.status(400).json({message : 'invalid titleid'})
     }
     try{   
@@ -25,11 +28,14 @@ const getSingleMovie = async(req , res) => {
         const trailer_gallery = await db.collection('trailer_gallery').findOne({movieId : titleid})
         const sendingObj  = {movie, cast , review , director , genre , trailer_gallery }
         if(movie){
+            customLogger.info('movie found' , 'movie')
             return res.status(200).json({message : 'movie found' , data : JSON.stringify(sendingObj)})
         }else{
+            customLogger.error('movie not found' , 'movie')
             return res.status(400).json({message : 'movie not found' , data : JSON.stringify({})})
         }
     }catch(err){
+        customLogger.error(err , 'movie')
         return res.status(500).json({message : 'getSingleMovie error'})
     }
 }

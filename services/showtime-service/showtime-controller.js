@@ -6,6 +6,9 @@ dotenv.config({path : path.resolve(__dirname , '../../.env')})
 // db clients 
 const pgPool = require('../../config/pgPoolConfig')
 
+// logger 
+const {logger : customLogger} = require('../../logs/logger/logger.config')
+
 
 const slotByTheaterController = async(req , res) => {
     console.log('inside slotbytheatercontroller')
@@ -18,8 +21,10 @@ const slotByTheaterController = async(req , res) => {
         const sendObj = {
             data : result.rows
         }
+        customLogger.info('fetched slot by theater' , 'showtime')
         return res.status(200).json({message : 'fetched slot' , data : JSON.stringify(sendObj)})
     }catch(err){
+        customLogger.error(err , 'showtime')
         return res.status(500).json({message : 'showTime Error'})
     }
 }
@@ -34,8 +39,10 @@ const slotByMovieController = async(req , res) => {
         const sendObj = {
             data : result.rows
         }
+        customLogger.info('fetched slot by movie' , 'showtime')
         return res.status(200).json({message : 'fetched slot' , data : JSON.stringify(sendObj)})
     }catch(err){
+        customLogger.error(err , 'showtime')
         return res.status(500).json({message : 'showTime Error'})
     }
 }

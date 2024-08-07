@@ -1,0 +1,8 @@
+2024-08-07T12:17:30.759Z [INFO]: ticket published to queue
+2024-08-07T12:17:30.763Z [INFO]: new ticket inserted
+2024-08-07T12:20:28.863Z [INFO]: ticket published to queue
+2024-08-07T12:20:28.864Z [INFO]: new ticket inserted
+2024-08-07T12:21:22.601Z [INFO]: ticket published to queue
+2024-08-07T12:21:22.602Z [INFO]: new ticket inserted
+2024-08-07T12:22:04.544Z [INFO]: ticket published to queue
+2024-08-07T12:22:04.545Z [INFO]: new ticket inserted
