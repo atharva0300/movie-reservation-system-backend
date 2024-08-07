@@ -67,5 +67,5 @@
 3. Populate SQL database -> done
 4. Finish writing all controller logic -> done
 5. Setup Notification serivce -> done
-6. Eastablish a custom logger
+6. Eastablish a custom logger -> done
 7. Setup Docker file

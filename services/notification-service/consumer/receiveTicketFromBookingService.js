@@ -8,6 +8,7 @@ const {transporter} = require('../sendEmail')
 const {mailOptions} = require('../mailOptions')
 const {v4 : uuid4} = require('uuid')
 const {logger : customLogger} = require('../../../logs/logger/logger.config')
+const {createTicketPDF} = require('./../utils/createPDF')
  
 
 const sendTicketToEmail = async (data) => {
@@ -28,6 +29,15 @@ const sendTicketToEmail = async (data) => {
 
             \n\nThank you for booking your movie tickets with us!
         `
+        const {fileName : pdfFileName, filePath : pdfFilePath} = createTicketPDF(data)
+        mailOptions['attachments'] = [
+            {
+                filename : pdfFileName,
+                path : pdfFilePath,
+                contentType : 'application/pdf'
+            }
+
+        ]
         console.log('mailOptions : ' , mailOptions)
         const info = await transporter.sendMail(mailOptions)
         console.log('info : ', info.response)
