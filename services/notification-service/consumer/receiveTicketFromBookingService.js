@@ -14,34 +14,42 @@ const {createTicketPDF} = require('./../utils/createPDF')
 const sendTicketToEmail = async (data) => {
     console.log('trying to send email')
     try{
-        // send mail 
-        mailOptions['to'] = `${data.user.email}`
-        mailOptions['subject'] = `Ticket Confirmation : ${uuid4()}`
-        mailOptions['text'] = `
-            Hello ${data.user.name},
-            \nYour Movie ticket has been confirmed. Below are the details of your ticket.
-            \n\nMovie : ${data.movie.movie_name}
-            \nLanguage : ${data.movie.language}
-            \nis Adult Rated : ${data.movie.isAdult}
-            \nShowtime : ${data.show.showtime}
-            \nSeats : ${data.seat.seat_number}
-            \nScreen : ${data.screen.screenid}
+        createTicketPDF(data).then(async pdfData => {
+            console.log('createticketpdf promise value : ' , pdfData)
+            const {fileName : pdfFileName , filePath : pdfFilePath} = pdfData
 
-            \n\nThank you for booking your movie tickets with us!
-        `
-        const {fileName : pdfFileName, filePath : pdfFilePath} = createTicketPDF(data)
-        mailOptions['attachments'] = [
-            {
-                filename : pdfFileName,
-                path : pdfFilePath,
-                contentType : 'application/pdf'
-            }
+            // send mail 
+            mailOptions['to'] = `${data.user.email}`
+            mailOptions['subject'] = `Ticket Confirmation : ${uuid4()}`
+            mailOptions['text'] = `
+                Hello ${data.user.name},
+                \nYour Movie ticket has been confirmed. Below are the details of your ticket.
+                \n\nMovie : ${data.movie.movie_name}
+                \nLanguage : ${data.movie.language}
+                \nis Adult Rated : ${data.movie.isAdult}
+                \nShowtime : ${data.show.showtime}
+                \nSeats : ${data.seat.seat_number}
+                \nScreen : ${data.screen.screenid}
 
-        ]
-        console.log('mailOptions : ' , mailOptions)
-        const info = await transporter.sendMail(mailOptions)
-        console.log('info : ', info.response)
-        customLogger.info('email sent' , 'notification')
+                \n\nThank you for booking your movie tickets with us!
+            `
+
+            mailOptions['attachments'] = [
+                {
+                    filename : pdfFileName,
+                    path : pdfFilePath,
+                    contentType : 'application/pdf'
+                }
+
+            ]
+            console.log('mailOptions : ' , mailOptions)
+            const info = await transporter.sendMail(mailOptions)
+            customLogger.info('email sent' , 'notification')
+            
+        }).catch(err => {
+            console.log('err : ' , err)
+            customLogger.error(err , 'notification')
+        })
     }catch(err){
         customLogger.error(err , 'notification')
         console.log('err : ' , err)
