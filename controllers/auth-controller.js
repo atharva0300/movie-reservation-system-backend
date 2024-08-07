@@ -1,15 +1,13 @@
-const express = require('express')
 const createPath = require('../shared/createPath')
 
 // logger
 const {logger : customLogger} = require('../logs/logger/logger.config')
 
+const apiType = 'auth'
+
 const authRegisterController = async (req , res) => {
-    console.log('inside auth register controller')
-    console.log(req.body)
-    const reqPath = req.path
-    const newPath = createPath(reqPath)
-    console.log(newPath)
+    const pathObj = {reqPath : req.path , apiType}
+    const newPath = createPath(pathObj)
     try{
         const response = await fetch(newPath , {
             method : "POST",
@@ -19,12 +17,12 @@ const authRegisterController = async (req , res) => {
             body : JSON.stringify(req.body)
         })
         const data = await response.json();
-        console.log('data : ' , data)
     
         if(data.code!='authCode0'){
+            customLogger.error(data , 'auth')
             return res.status(400).json({message : data.message})
         }
-        customLogger.info(`fetch successful ${response.status}` , 'server')
+        customLogger.info(`user registered successfully ${response.status}` , 'server')
         res.status(201).json({message : data.message})
     }catch(err){
         customLogger.error(err , 'server')
@@ -33,7 +31,8 @@ const authRegisterController = async (req , res) => {
 }
 
 const authLoginController = async (req , res) => {
-    const newPath = createPath(req.path)
+    const pathObj = {reqPath : req.path , apiType}
+    const newPath = createPath(pathObj)
     try{
         const response = await fetch(newPath , {
             method : 'POST',
@@ -52,7 +51,8 @@ const authLoginController = async (req , res) => {
 }
 
 const authRefreshTokenController = async(req , res) => {
-    const newPath = createPath(reqPath)
+    const pathObj = {reqPath : req.path , apiType}
+    const newPath = createPath(pathObj)
     try{
         customLogger.info(`refresh token successful ${response.statys}` , 'server')
         res.send('authlogin controller')

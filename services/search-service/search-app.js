@@ -1,9 +1,8 @@
 const express = require('express')
 const app = express()
 const dotenv = require('dotenv')
-const path = require('path')
 const { searchMovieController, searchTheaterController, searchPlaceController } = require('./search-controller')
-dotenv.config({path : path.resolve(__dirname , '../../.env')})
+dotenv.config()
 
 // port
 const SEARCH_PORT = process.env.SEARCH_PORT

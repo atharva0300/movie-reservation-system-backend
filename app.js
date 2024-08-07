@@ -1,18 +1,12 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
-const mongoose = require('mongoose')
 const dotenv = require('dotenv')
-const path = require('path')
-const os = require('os')
 
 // loading the dotenv file
 dotenv.config()
 
 const app = express();
-
-// controllers 
-const {authController} = require('./controllers/auth-controller')
 
 
 // middlewares 
@@ -26,7 +20,6 @@ app.use('/api/movies/' , require('./routes/movie-route'))
 app.use('/api/search' , require('./routes/search-route'))
 app.use('/api/slots/' , require('./routes/showtime-route'))
 app.use('/api/booking/' , require('./routes/booking-route'))
-
 
 
 // error handling middleware

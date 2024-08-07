@@ -1,7 +1,6 @@
 const express = require('express')
 const dotenv = require('dotenv')
-const path = require('path')
-dotenv.config({path : path.resolve(__dirname , '../../.env')})
+dotenv.config()
 
 // db clients 
 const pgPool = require('../../config/pgPoolConfig')
@@ -11,13 +10,10 @@ const {logger : customLogger} = require('../../logs/logger/logger.config')
 
 
 const slotByTheaterController = async(req , res) => {
-    console.log('inside slotbytheatercontroller')
     const theaterId = req.query.q
-    console.log('theaterId : ' , theaterId)
     try{
         // fetch all the slots mapping to a theaterid
         const result = await pgPool.query('SELECT * FROM public."Slot" WHERE theaterid = $1' , [theaterId])
-        console.log(result.rowCount)
         const sendObj = {
             data : result.rows
         }
@@ -31,11 +27,9 @@ const slotByTheaterController = async(req , res) => {
 
 const slotByMovieController = async(req , res) => {
     const movieId = req.query.q
-    console.log('movieId : ' , movieId)
     try{   
         // fetch all the slots mapping to a movieid
         const result = await pgPool.query('SELECT * FROM public."Slot" WHERE movieid = $1' , [movieId])
-        console.log(result.rowCount)
         const sendObj = {
             data : result.rows
         }

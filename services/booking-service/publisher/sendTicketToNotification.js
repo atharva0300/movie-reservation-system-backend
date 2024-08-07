@@ -4,6 +4,7 @@ const path =  require('path')
 dotenv.config({path : path.resolve(__dirname , '../../../.env')})
 const amqp = require('amqplib')
 
+// logger
 const {logger : customLogger} = require('../../../logs/logger/logger.config')
 
 // import routing information

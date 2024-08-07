@@ -8,7 +8,5 @@ router.get('/' , getAllMovies)
 // get single movie 
 router.post('/:id' , getSingleMovie)
 
-// insert single movie 
-// router.post('/:id' , )
 
 module.exports = router

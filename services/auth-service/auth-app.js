@@ -1,8 +1,8 @@
 const express = require('express')
 const dotenv = require('dotenv')
+const path = require('path')
 const pgPool = require('../../config/pgPoolConfig')
-
-dotenv.config()
+dotenv.config({path : path.resolve(__dirname , '../../.env')})
 
 // config 
 const AUTH_PORT = process.env.AUTH_PORT
@@ -16,6 +16,7 @@ const app = express();
 // middlewares 
 app.use(express.json())
 
+// routes
 app.post('/register' , register)  
 
 app.post('/login' , login)

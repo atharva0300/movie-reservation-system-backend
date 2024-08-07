@@ -2,18 +2,18 @@ const express = require('express')
 const dotenv = require('dotenv')
 const path = require('path')
 const { MongoClient } = require('mongodb')
-dotenv.config({path : path.resolve(__dirname , '../../.env')})
+dotenv.config()
 
+// mong client
 const mongoClient = new MongoClient(process.env.MONGO_URI.toString())
 
+// logger
 const {logger : customLogger} = require('../../logs/logger/logger.config')
 
 
 const getSingleMovie = async(req , res) => {
-    console.log('inside get single movie')
     const {id : titleid } = req.params 
-    console.log('titleid : '  , titleid)
-    if(titleid == undefined){
+    if(!titleid){
         customLogger.error('titleid is undefined' ,  'movie')
         return res.status(400).json({message : 'invalid titleid'})
     }
@@ -43,15 +43,7 @@ const getSingleMovie = async(req , res) => {
 const insertSingleMovie = async(req , res) => {
     const {movieInfoObject} = req.body
     try{
-        /*
-        const movieInfoCollection = database.collection('movie_info')
-        const result = await movieInfoCollection.insertOne(movieInfoObject)
-        if(result){
-            return res.status(201).json({message : 'movie inserted' , data : JSON.stringify(result)})
-        }else{
-            return res.status(400).json({message : 'failed to insert movie' , data : JSON.stringify(result)})
-        }
-            */
+        return res.status(200).json({message : 'works'})
     }catch(err){
         return res.status(500).json({message : 'getSingleMovie error'})
     }
@@ -60,21 +52,11 @@ const insertSingleMovie = async(req , res) => {
 const getAllMovies = async(req , res) => {
     console.log('inside getAllMovies')
     try{
-        /*
-        const movieInfoCollection = database.collection('movie_info')
-        movieInfoCollection.find().toArray().then((result) => {
-            console.log('result : ' , result)
-            return res.status(200).json({message : 'obtained movies' , data : JSON.stringify(result)})
-        }).catch((err) => {
-            return res.status(400).json({message : 'movie not found' , data : JSON.stringify({})})
-        })
-            */
+        return res.status(200).json({message : 'works'})
     }catch(err){
         return res.status(500).json({message : 'getAllMovies error'})
     }
 }
-
-
 
 
 

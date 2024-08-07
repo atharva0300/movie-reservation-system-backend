@@ -63,9 +63,9 @@
 
 ## Things to be done 
 1. Distributed NoSQL database for each microservice -> plan rejected
-2. Establish communication between microservices usung event driven architecture -> plan rejected
+2. Establish communication between microservices usung event driven architecture -> 
 3. Populate SQL database -> done
-4. Finish writing all controller logic -> done
+4. Finish writing all controller logic 
 5. Setup Notification serivce -> done
 6. Eastablish a custom logger -> done
-7. Setup Docker file
+7. Use Sequelize 

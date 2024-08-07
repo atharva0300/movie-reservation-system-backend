@@ -6,10 +6,11 @@ const cookieParser = require('cookie-parser')
 
 // pgclient 
 const pgPool = require('../../config/pgPoolConfig')
+
+// logger
 const { logger : customLogger } = require('../../logs/logger/logger.config')
 
 const register = async(req , res) => {
-    console.log('reqbody : ' , req.body)
     const {name , email , password } = req.body
 
     try{
@@ -22,7 +23,6 @@ const register = async(req , res) => {
         const hashedPassword = await bcrypt.hash(password , salt);
         
         try{
-            // insert into User table ( SQL )
             await pgPool.query('INSERT INTO public."User" (email, password , name) VALUES ( $1 , $2 , $3 )' , [email , hashedPassword , name])
             customLogger.info(`Inserted new user into table` , 'auth')
             res.status(201).json({message : 'User registered successully'})
@@ -38,15 +38,12 @@ const register = async(req , res) => {
 
 const login = async(req , res) => {
     const {email , password} = req.body
-    console.log(email , password)
     try{
         const user = await pgPool.query('SELECT * FROM public."User" WHERE email = $1' , [email])
         const isMatch = await bcrypt.compare(password , user.rows[0].password)
         if(user.rowCount == 1 && isMatch){
             const userName = user.rows[0].name
             const userEmail = user.rows[0].email
-            console.log(userName)
-            console.log(userEmail)
             const payLoad = {name : userName , email : userEmail}
             try{
                 // sign with jwt 

@@ -1,4 +1,3 @@
-const express = require('express')
 const dotenv = require('dotenv')
 const path = require('path')
 const {MongoClient} = require('mongodb')
@@ -13,7 +12,6 @@ const {logger : customLogger} = require('../../logs/logger/logger.config')
 
 const searchMovieController = async(req , res , next) => {
     const searchTerm = req.query.q
-    console.log('search term : ' , searchTerm)
     try{
         await mongoClient.connect();
         const db = mongoClient.db('movie-reservation-system')
@@ -45,7 +43,6 @@ const searchMovieController = async(req , res , next) => {
 
 const searchPlaceController = async(req , res , next) => {
     const searchTerm = req.query.q;
-    console.log('search query : ' , searchTerm)
     try{
         // search in place 
         await pgPool.query('SELECT * FROM public."Place" WHERE city = $1' , [searchTerm]).then((result) => {
@@ -73,7 +70,6 @@ const searchPlaceController = async(req , res , next) => {
 
 const searchTheaterController = async(req , res) => {
     const searchTerm = req.query.q;
-    console.log('search term : ' , searchTerm);
     try{
         // search in theater
         await pgPool.query('SELECT * FROM public."Theater" WHERE name = $1' , [searchTerm]).then((result) => {

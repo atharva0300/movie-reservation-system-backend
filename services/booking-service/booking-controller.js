@@ -68,12 +68,9 @@ const calculateTicketid = (req , res) => {
 
 const bookBulkTicketController = async(req , res) => {
     const dataObj = req.body
-    console.log('reqBody : ' , dataObj)
     try{
         const ticketid = calculateTicketid();
         const purchasetime = getServerTime();
-        console.log('ticketid : ' , ticketid)
-        console.log('purchaseTime : ' , purchasetime)
         const {user , screen , movie, show , seat} = dataObj
         let result;
         try{

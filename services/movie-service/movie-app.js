@@ -10,12 +10,12 @@ const app = express();
 // middleware 
 app.use(express.json())
 
+// routes
 app.get('/' , getAllMovies)
 
 app.post('/' , insertSingleMovie)
 
 app.get('/:id' , getSingleMovie)
-
 
 
 
