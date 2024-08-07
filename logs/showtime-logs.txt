@@ -1,1 +1,0 @@
-2024-08-07T12:33:08.779Z [INFO]: fetched slot by movie
