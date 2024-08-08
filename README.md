@@ -62,13 +62,13 @@
 
 
 ## Things to be done 
-1. Distributed NoSQL database for each microservice -> 
-2. Establish communication between microservices usung event driven architecture -> 
+1. Distributed NoSQL database for each microservice -> NA
+2. Establish communication between microservices usung event driven architecture -> NA
 3. Populate SQL database -> done
-4. Finish writing all controller logic 
+4. Finish writing all controller logic -> done
 5. Setup Notification serivce -> done
 6. Eastablish a custom logger -> done
-7. Use Sequelize or Prisma ORM -> 
+7. Use Sequelize or Prisma ORM -> NA
 8. Finish Auth -> 
 9. Finish Admin Level access to services ( Authorization ) -> 
-10. Finish all CRUD + Patch operations -> 
+10. Finish all CRUD + Patch operations -> done

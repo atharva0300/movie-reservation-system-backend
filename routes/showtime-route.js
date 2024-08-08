@@ -1,5 +1,6 @@
 const express = require('express')
 const { slotTheaterController, slotMovieController } = require('../controllers/showtime-controller')
+const verifyJWT = require('../middlewares/verifyJWT')
 
 const router = express.Router()
 

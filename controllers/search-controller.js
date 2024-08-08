@@ -6,10 +6,6 @@ const apiType = 'search'
 const {logger : customLogger} = require('../logs/logger/logger.config')
 
 const searchTermController = async(req , res) => {
-    console.log(req.url)
-    console.log(req.baseUrl)
-    console.log(req.originalUrl)
-    console.log(req.query.searchTerm)
     const newPath = createPath(req.url , apiType)
     try{
         const response = await fetch(newPath , {

@@ -10,6 +10,19 @@ const pgPool = require('../../config/pgPoolConfig')
 // logger
 const { logger : customLogger } = require('../../logs/logger/logger.config')
 
+const extractJWTCookieValue = (cookieHeader) => {
+    if (cookieHeader) {
+        const cookies = cookieHeader.split(';').map(cookie => cookie.trim());
+        for (const cookie of cookies) {
+            const [key, value] = cookie.split('=');
+            if (key === 'jwt') {
+                return value;
+                break;
+            }
+        }
+    }
+}
+
 const register = async(req , res) => {
     const {name , email , password } = req.body
 
@@ -21,9 +34,12 @@ const register = async(req , res) => {
         }
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password , salt);
+        const createDate = new Date().toISOString()
+        console.log(createDate)
+        const role = 'admin'
         
         try{
-            await pgPool.query('INSERT INTO public."User" (email, password , name) VALUES ( $1 , $2 , $3 )' , [email , hashedPassword , name])
+            await pgPool.query('INSERT INTO public."User" (email, password , name , createdate , role) VALUES ( $1 , $2 , $3  , $4 , $5 )' , [email , hashedPassword , name , createDate , role])
             customLogger.info(`Inserted new user into table` , 'auth')
             res.status(201).json({message : 'User registered successully'})
         }catch(err){
@@ -44,17 +60,33 @@ const login = async(req , res) => {
         if(user.rowCount == 1 && isMatch){
             const userName = user.rows[0].name
             const userEmail = user.rows[0].email
-            const payLoad = {name : userName , email : userEmail}
             try{
                 // sign with jwt 
-                const access_token = jwt.sign(payLoad , process.env.SECRET_KEY , {expiresIn : '1h'})
-                customLogger.info('cookie set' , 'auth')
-                res.cookie('access_token' , access_token , {httpOnly : true})
-                return res.status(200).json({message : 'Login Successful'})
+                const accessToken = jwt.sign(
+                    {"useremail" : userEmail , "role" : user.rows[0].role},
+                    process.env.ACCESS_TOKEN_SECRET,
+                    { expiresIn : '1m' } 
+                )
+                const refreshToken = jwt.sign(
+                    {"useremail" : userEmail , "role" : user.rows[0].role},
+                    process.env.REFRESH_TOKEN_SECRET,
+                    { expiresIn : '1d'}
+                )
+                console.log(refreshToken)
+                const response = await pgPool.query('UPDATE public."User" SET refreshtoken = $1 WHERE email = $2' , [refreshToken , email])
+                if(response.rowCount == 1){
+                    customLogger.info('login successful' , 'auth')
+                    res.cookie('jwt' , refreshToken , {httpOnly : true, maxAge : 24 * 60 * 60 * 1000})
+                    return res.status(200).json({message : 'login successfully', data : JSON.stringify(accessToken) , jwtName : 'jwt' , refreshToken : refreshToken , maxAge : 24*60*60*1000 , httpOnly : true})
+                }else{
+                    customLogger.info('failed to insert refresh token' , 'auth')
+                    return res.status(401).json({message : 'failed to login'})
+                }
+                
             }catch(err){
-                console.log('Error in signing jwt : ' , err)
+                console.log('err : ' , err)
                 customLogger.error(err , 'auth')
-                return res.status(500).json({message : "Error in signing jwt"})
+                return res.status(500).json({message : JSON.stringify(err.message)})
             }
         }else{
             customLogger.error(err , 'auth')
@@ -64,16 +96,86 @@ const login = async(req , res) => {
     }catch(err){
         console.log('err : ' , err)
         customLogger.error(err , 'auth')
-        return res.status(500).json({message : 'auth Login server error'})
+        return res.status(500).json({message : 'auth Login error'})
     }
 }
 
-const logout = async(req , res) => {
-    res.status(200).json({message : 'inside logout'})
+const logout = async(req , res) => { 
+    console.log('inside logout')
+    // on client, delete the access token 
+    console.log(req.headers.cookie)
+    const refreshToken = extractJWTCookieValue(req.headers.cookie)
+    if(!refreshToken){
+        customLogger.info('Cookie already absent' , 'auth')
+        return res.sendStatus(201)  // no content
+    }
+    try{
+        // is refreshtoken in db ? 
+        const result = await pgPool.query('SELECT refreshtoken , email from public."User" WHERE refreshtoken = $1' , [refreshToken])
+        if(result.rowCount == 1 && result.rows[0].refreshtoken){
+            // clear the cookie 
+            customLogger.info('Cookie cleared, logged out' , 'auth')
+            res.clearCookie('jwt' , {httpOnly : true})
+            
+            // delete refreshToken from db
+            const result2 = await pgPool.query('UPDATE public."User" SET refreshtoken = $1 WHERE email = $2' , [null , result.rows[0].email])
+            if(result2.rowCount == 1){
+                customLogger.info('refreshtoken delete from db' , 'auth')
+                return res.sendStatus(204);
+            }else{
+                customLogger.info('Refresh token not found in db while deleting' , 'auth')
+                return res.sendStatus(204);
+            }
+        }else{
+            customLogger.info('refresh token not present in db, logged out' , 'auth')
+            res.clearCookie('jwt' , {httpOnly : true})
+            return res.sendStatus(204);
+        }   
+    }catch(err){
+        console.log('err : ' , err)
+        customLogger.error(err , 'auth')
+        return res.status(500).json({message : 'logout error'})
+    }
 }
 
 const refreshToken = async(req , res) => {
-    res.status(200).json({message : 'inside refresk token controller'})
+    console.log('inside refreshToken')
+    console.log(req.headers)
+    const refreshToken = extractJWTCookieValue(req.headers.cookie)
+    console.log('refreshToken : ' , refreshToken)
+    if(!req.headers.cookie || !refreshToken) return res.status(401).json({message : 'unauthorized'})
+    try{
+        const result = await pgPool.query('SELECT refreshtoken, email from public."User" WHERE refreshtoken = $1' , [refreshToken])
+        console.log(result)
+        if(result.rowCount == 1 && refreshToken == result.rows[0].refreshtoken){
+            const userRefreshToken = result.rows[0].refreshtoken
+            console.log('userrefreshToken : ' , userRefreshToken)
+            jwt.verify(
+                refreshToken,
+                process.env.REFRESH_TOKEN_SECRET,
+                (err , decoded) => {
+                    if(err || result.rows[0].email != decoded.useremail ){
+                        return res.status(403).json({message : 'Unauthorized'})  // forbidden
+                    }
+                    const accessToken = jwt.sign(
+                        {"useremail" : result.rows[0].email , "role" : result.rows[0].role },
+                        process.env.ACCESS_TOKEN_SECRET,
+                        { expiresIn : '1m'}
+                    );
+                    customLogger.info('access token refreshed' , 'auth')
+                    res.status(200).json({message : 'access token refreshed' , data : accessToken})
+                }
+            )
+            return res
+        }else{
+            customLogger.info('The email does not eists' , 'auth')
+            return res.status(403).json({message : 'unauthorized'}) // forbidden
+        }
+    }catch(err){
+        console.log('err : ' , err)
+        customLogger.error(err , 'auth')
+        return res.status(500).json({message : 'refreshToken  error'})
+    }
 }
 
 const updatePassword = async(req, res) => {

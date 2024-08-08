@@ -1,7 +1,8 @@
-const express = require('express')
-const router = express.Router
+const express = require('express');
+const { updateUserNameController } = require('../controllers/user-controller');
+const router = express.Router()
+const verifyJWT = require('../middlewares/verifyJWT')
 
-
-router.post('/' , );
+router.patch('/username' , verifyJWT , updateUserNameController);
 
 module.exports = router;

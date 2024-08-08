@@ -12,7 +12,8 @@ const apiTypePortMapping = {
     'booking' : process.env.BOOKING_PORT,
     'comment' : process.env.COMMENT_PORT,
     'offer' : process.env.OFFER_PORT,
-    'theater' : process.env.THEATER_PORT
+    'theater' : process.env.THEATER_PORT,
+    'user' : process.env.USER_PORT
 }
 
 const createPath = (originalUrl , apiType) => {
