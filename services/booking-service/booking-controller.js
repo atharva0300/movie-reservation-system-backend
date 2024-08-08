@@ -83,11 +83,9 @@ const bookBulkTicketController = async(req , res) => {
             customLogger.error(err , 'booking')
             return res.status(400).json({message : 'invalid insert data'})
         }
-        console.log('result : ' , result)
         if(result.rowCount == 1){
             const correlationid = uuid4()
             dataObj['correlation-id'] = correlationid
-            console.log('dataObj : ' , dataObj)
 
             // send ticket to ticket-notification queue 
             await sendTicketToNotification(dataObj).then(accepted => {

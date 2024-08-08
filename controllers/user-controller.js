@@ -9,7 +9,6 @@ const {logger : customLogger} = require('../logs/logger/logger.config')
 
 const updateUserNameController = async(req , res) => {
     const newPath = createPath(req.url , apiType)
-    console.log(req.body)
     try{
         const response = await fetch(newPath, {
             method: 'PATCH',

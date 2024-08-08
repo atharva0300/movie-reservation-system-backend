@@ -20,7 +20,7 @@ const slotTheaterController = async(req , res) => {
         customLogger.info(`slot theater successful : ${response.status}` , 'server')
         return res.status(200).json({message : 'works' , data})
     }catch(err){
-        console.log(err)
+        console.log('err : ' , err)
         customLogger.error(err , 'server')
         return res.status(500).json({message : 'slot Theater Controller in main server error'})
     }
@@ -40,7 +40,7 @@ const slotMovieController = async(req , res) => {
         customLogger.info(`slot movie successful ${response.status}` , 'server')
         return res.status(200).json({message : 'slot movie successful' , data})
     }catch(err){
-        console.log(err)
+        console.log('err : ' , err)
         customLogger.error(err , 'server')
         return res.status(500).json({message : 'slot Movie Controller in main server error'})
     }

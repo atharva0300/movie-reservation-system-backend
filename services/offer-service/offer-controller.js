@@ -12,7 +12,6 @@ const getOfferDiscount = async(req , res ) => {
     try{
         const response = await pgPool.query('SELECT discount from public."Offer" WHERE code = $1' , [offerCode])
         if(response.rowCount == 1){
-            console.log(response)
             customLogger.info('found the offer' , 'offer')
             return res.status(200).json({message : 'found offer' , data : JSON.stringify(response.rows[0].discount)})
         }else{

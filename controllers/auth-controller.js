@@ -42,7 +42,6 @@ const authLoginController = async (req , res) => {
         })
         const data = await response.json()
         customLogger.info(`login successful ${response.status}` , 'server')
-        console.log(data.refreshToken)
         res.cookie(data.jwtName , data.refreshToken , {httpOnly : data.httpOnly , maxAge : data.maxAge})
         return res.status(response.status).json({message : data.message , data : data.data})
     }catch(err){
@@ -53,13 +52,9 @@ const authLoginController = async (req , res) => {
 
 const authRefreshTokenController = async (req , res) => {
     const newPath = createPath(req.url , apiType)
-    console.log('inside authRefreshToken')
     const cookies = req.cookies
-    console.log('cookies : ' , cookies)
     if(!cookies || !cookies?.jwt) return res.status(401).json({message : 'Unauthorized'})
-    console.log(cookies.jwt)
     const refreshToken = cookies.jwt
-    console.log(refreshToken)
     try{
         const response = await fetch(newPath  ,{
             method : 'GET',
@@ -68,7 +63,6 @@ const authRefreshTokenController = async (req , res) => {
             }
         })
         const data = await response.json();
-        console.log('accesstoken : ' , data.data)
         customLogger.info(`refresh token successful ${response.status}` , 'server')
         return res.status(response.status).json({message : data.message , data : data.data})
     }catch(err){
@@ -105,9 +99,6 @@ const logoutController = async (req , res ) => {
                 'Cookie' : Object.entries(req.cookies).map(([key , value]) => `${key}=${value}`).join('; ')
             }
         })
-        console.log(response.status)
-        console.log(response.headers)
-        console.log(response.ok)
         return res.status(response.status).send(await response.text())
     }catch(err){
         console.log('err : ' , err)

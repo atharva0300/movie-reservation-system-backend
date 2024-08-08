@@ -24,7 +24,7 @@ const extractJWTCookieValue = (cookieHeader) => {
 }
 
 const register = async(req , res) => {
-    const {name , email , password } = req.body
+    const {name , email , password , role } = req.body
 
     try{
         const existingUser = await pgPool.query('SELECT * FROM public."User" WHERE email = $1' , [email])
@@ -35,8 +35,6 @@ const register = async(req , res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password , salt);
         const createDate = new Date().toISOString()
-        console.log(createDate)
-        const role = 'admin'
         
         try{
             await pgPool.query('INSERT INTO public."User" (email, password , name , createdate , role) VALUES ( $1 , $2 , $3  , $4 , $5 )' , [email , hashedPassword , name , createDate , role])
@@ -72,7 +70,6 @@ const login = async(req , res) => {
                     process.env.REFRESH_TOKEN_SECRET,
                     { expiresIn : '1d'}
                 )
-                console.log(refreshToken)
                 const response = await pgPool.query('UPDATE public."User" SET refreshtoken = $1 WHERE email = $2' , [refreshToken , email])
                 if(response.rowCount == 1){
                     customLogger.info('login successful' , 'auth')
@@ -101,9 +98,7 @@ const login = async(req , res) => {
 }
 
 const logout = async(req , res) => { 
-    console.log('inside logout')
     // on client, delete the access token 
-    console.log(req.headers.cookie)
     const refreshToken = extractJWTCookieValue(req.headers.cookie)
     if(!refreshToken){
         customLogger.info('Cookie already absent' , 'auth')
@@ -139,17 +134,12 @@ const logout = async(req , res) => {
 }
 
 const refreshToken = async(req , res) => {
-    console.log('inside refreshToken')
-    console.log(req.headers)
     const refreshToken = extractJWTCookieValue(req.headers.cookie)
-    console.log('refreshToken : ' , refreshToken)
     if(!req.headers.cookie || !refreshToken) return res.status(401).json({message : 'unauthorized'})
     try{
         const result = await pgPool.query('SELECT refreshtoken, email from public."User" WHERE refreshtoken = $1' , [refreshToken])
-        console.log(result)
         if(result.rowCount == 1 && refreshToken == result.rows[0].refreshtoken){
             const userRefreshToken = result.rows[0].refreshtoken
-            console.log('userrefreshToken : ' , userRefreshToken)
             jwt.verify(
                 refreshToken,
                 process.env.REFRESH_TOKEN_SECRET,
@@ -180,17 +170,13 @@ const refreshToken = async(req , res) => {
 
 const updatePassword = async(req, res) => {
     const {userid , password} = req.body
-    console.log(userid)
-    console.log(password)
     try{
         const user = await pgPool.query('SELECT * FROM public."User" WHERE userid = $1' , [userid])
-        console.log(user)
         if(user.rowCount == 1){
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password , salt);
             try{
                 const updateResponse = await pgPool.query('UPDATE public."User" SET password = $1 WHERE userid = $2' , [hashedPassword , userid])
-                console.log(updateResponse)
                 if(updateResponse.rowCount == 1){
                     customLogger.info('password updated' , 'auth')
                     return res.status(200).json({message : 'password updated'})

@@ -31,7 +31,6 @@ const sendTicketToEmail = async (data) => {
                 }
 
             ]
-            // console.log('mailOptions : ' , mailOptions)
             await transporter.sendMail(mailOptions)
             customLogger.info('email sent' , 'notification')
             

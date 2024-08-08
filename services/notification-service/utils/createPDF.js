@@ -31,7 +31,6 @@ const createTicketPDF = (data) => {
     return new Promise((resolve , reject) => {
         checkTicketPdfDir(targetDirPath).then((value) => {
             // target dir has been created or already exists
-            console.log('value : ' , value)
     
                 // Create a new PDF document
             const doc = new PDFDocument();
@@ -72,9 +71,6 @@ const createTicketPDF = (data) => {
     
             // Path and filename
             try {
-                console.log('dirname in pdf : ' , __dirname)
-                
-                console.log('new filepath : ' , targetDirPath)
                 const newName = uuid4().toString() + '_' + data.user.userid;
                 const fileName = `${newName}_${Date.now()}.pdf`;
                 const filePath = path.join(targetDirPath, fileName);
@@ -84,9 +80,7 @@ const createTicketPDF = (data) => {
                 doc.pipe(fs.createWriteStream(filePath));
                 doc.end();
     
-                console.log('final filePath : ' , filePath);
                 const returnObj = {fileName : fileName , filePath : filePath }
-                console.log('returnObj : ' , returnObj)
                 if(returnObj) resolve(returnObj)
             } catch (err) {
                 console.log('err in createpdf : ' , err);

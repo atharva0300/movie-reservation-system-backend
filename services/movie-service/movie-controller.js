@@ -29,7 +29,6 @@ const getSingleMovie = async(req , res) => {
             db.collection('trailer_gallery').findOne({movieId : titleid})
         ])
         const sendingObj  = {movie, cast , review , director , genre , trailer_gallery }
-        console.log(sendingObj)
         if(movie){
             customLogger.info('movie found' , 'movie')
             return res.status(200).json({message : 'movie found' , data : JSON.stringify(sendingObj)})
@@ -77,7 +76,6 @@ const getAllMovies = async(req , res) => {
         const movieInfoResponse = await db.collection('movie_info').find().toArray()
         if(movieInfoResponse){
             customLogger.info('fetched all movies from movie_info' , 'movie')
-            // console.log(movieInfoResponse)
             return res.status(200).json({message : 'fetched all movies from movie_info' , data : JSON.stringify(movieInfoResponse)})
         }else{
             customLogger.error('failed to fetch all movies' , 'movie')
@@ -91,7 +89,6 @@ const getAllMovies = async(req , res) => {
 
 const deleteSingleMovie = async(req , res) => {
     const {id} = req.params
-    console.log(id)
     if(!id){
         customLogger.error('movieId is not defined' , 'movie')
         return res.status(400).json({message : 'movieId is not defined'})

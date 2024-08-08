@@ -12,8 +12,6 @@ const {logger : customLogger} = require('../../logs/logger/logger.config')
 
 const searchMovieController = async(req , res , next) => {
     const searchTerm = req.query.q
-    console.log('req.query : ' , req.query)
-    console.log(searchTerm)
     try{
         await mongoClient.connect();
         const db = mongoClient.db(process.env.MOVIE_RESERVATION_DB)
@@ -21,7 +19,6 @@ const searchMovieController = async(req , res , next) => {
         // search in movie_info 
         await db.collection('movie_info').findOne({titleText : searchTerm}).then((movie) => {
             if(movie){
-                console.log('found in movie')
                 const sendObj = {
                     movie,
                     searchFoundIn : 'movie_info'
@@ -49,7 +46,6 @@ const searchPlaceController = async(req , res , next) => {
         // search in place 
         await pgPool.query('SELECT * FROM public."Place" WHERE city = $1' , [searchTerm]).then((result) => {
             if(result.rowCount !=0 ){
-                console.log('found in place')
                 const sendObj = {
                     place : result.rows,
                     searchFoundIn : 'place'
@@ -76,7 +72,6 @@ const searchTheaterController = async(req , res) => {
         // search in theater
         await pgPool.query('SELECT * FROM public."Theater" WHERE name = $1' , [searchTerm]).then((result) => {
             if(result.rowCount != 0){
-                console.log('found in theaters')
                 const sendObj = {
                     theater : result.rows,
                     searchFoundIn : 'theaters'

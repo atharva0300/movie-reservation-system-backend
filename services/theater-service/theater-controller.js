@@ -39,7 +39,6 @@ const getScreenDetailsByTheaterId = async(req , res) => {
     try{
         // obtain all screenids from theaterId 
         const response = await pgPool.query('SELECT screenid , screen_number, capacity FROM public."Screen" WHERE theaterid = $1' , [theaterId])
-        console.log(response)
         customLogger.info('screen details with the theater id fetched' , 'theater')
         return res.status(200).json({message : 'screen details with the theaterid fetched' , data : JSON.stringify(response.rows)})
     }catch(err){
@@ -53,7 +52,6 @@ const getSeatDetailsById = async(req , res) => {
     const {screenId} = req.params
     try{
         const response = await pgPool.query('SELECT seatid, seatnumber, isavailable FROM public."Seat" WHERE screenid = $1' , [screenId])
-        console.log(response)
         customLogger.info('seat details with the screen id fetched' , 'theater')
         return res.status(200).json({message : 'seat details with the screenid fetched' , data : JSON.stringify(response.rows)})
     }catch(err){

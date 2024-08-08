@@ -69,6 +69,6 @@
 5. Setup Notification serivce -> done
 6. Eastablish a custom logger -> done
 7. Use Sequelize or Prisma ORM -> NA
-8. Finish Auth -> 
-9. Finish Admin Level access to services ( Authorization ) -> 
+8. Finish Auth -> done
+9. Finish Admin Level access to services ( Authorization ) -> done
 10. Finish all CRUD + Patch operations -> done

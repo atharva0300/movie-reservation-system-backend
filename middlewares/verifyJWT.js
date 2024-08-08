@@ -3,7 +3,6 @@ const dotenv = require('dotenv')
 dotenv.config()
 
 const verifyJWT = (req , res , next) => {
-    console.log('inside verifyJWT')
     const authHeader  = req.headers['authorization']
     if(!authHeader) return res.sendStatus(401);
     const token = authHeader.split(' ')[1]
@@ -15,8 +14,6 @@ const verifyJWT = (req , res , next) => {
             if(err) return res.sendStatus(403); // invalid token
             req.useremail = decoded.useremail
             req.role = decoded.role
-            console.log(decoded.useremail)
-            console.log(decoded.role)
             next()
         }
     )

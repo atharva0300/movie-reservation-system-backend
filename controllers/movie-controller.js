@@ -59,7 +59,6 @@ const getSingleMovie = async(req , res) => {
             }
         })
         const result = await response.json();
-        // console.log(Object.keys(result.data))
         if(result){
             customLogger.info(`get single movie successful ${response.status}` , 'server')
             return res.status(response.status).json({message : result.message , data : result.data})    
@@ -77,7 +76,6 @@ const getSingleMovie = async(req , res) => {
 // update movie details
 const updateSingleMovie = async(req , res) => {
     const newPath =  createPath(req.url , apiType)
-    console.log(req.body)
     try{
         const response = await fetch(newPath , {
             method : 'PUT',

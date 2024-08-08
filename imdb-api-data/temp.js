@@ -11,7 +11,6 @@ const imdbTitleIds = [
 const {MongoClient} = require('mongodb')
 const dotenv = require('dotenv')
 dotenv.config()
-console.log(process.env.MONGO_URI.toString())
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const mongoClient = new MongoClient(process.env.MONGO_URI.toString());
@@ -33,8 +32,6 @@ const makeReq = async(req , res) => {
           const url = `https://imdb146.p.rapidapi.com/v1/title/?id=${titleid}`
           const response = await fetch(url, options);
           const data = await response.json();
-          console.log(data)
-
 
           const movieObject = {
             id : data.id,
