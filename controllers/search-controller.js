@@ -1,4 +1,4 @@
-const createPath = require('../shared/createPath')
+const createPath = require('../utils/createPath')
 
 const apiType = 'search'
 
@@ -6,12 +6,11 @@ const apiType = 'search'
 const {logger : customLogger} = require('../logs/logger/logger.config')
 
 const searchTermController = async(req , res) => {
-    const pathObj = {
-        reqPath : req.path,
-        apiType,
-        query : searchTerm
-    }
-    const newPath = createPath(pathObj)
+    console.log(req.url)
+    console.log(req.baseUrl)
+    console.log(req.originalUrl)
+    console.log(req.query.searchTerm)
+    const newPath = createPath(req.url , apiType)
     try{
         const response = await fetch(newPath , {
             method : 'GET',

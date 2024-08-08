@@ -1,4 +1,4 @@
-const createPath = require('../shared/createPath')
+const createPath = require('../utils/createPath')
 
 const apiType = 'booking'
 
@@ -6,8 +6,7 @@ const apiType = 'booking'
 const {logger : customLogger} = require('../logs/logger/logger.config')
 
 const bookBulkTicketController = async(req , res) => {
-    const pathObj = { reqPath : req.path, apiType }
-    const newPath = createPath(pathObj)
+    const newPath = createPath(req.url , apiType)
     try{
         const response = await fetch(newPath , {
             method : 'POST',

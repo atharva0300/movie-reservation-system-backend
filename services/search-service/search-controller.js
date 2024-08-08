@@ -1,6 +1,6 @@
 const dotenv = require('dotenv')
-const path = require('path')
 const {MongoClient} = require('mongodb')
+const path = require('path')
 dotenv.config({path : path.resolve(__dirname , '../../.env')})
 
 // db clients
@@ -12,9 +12,11 @@ const {logger : customLogger} = require('../../logs/logger/logger.config')
 
 const searchMovieController = async(req , res , next) => {
     const searchTerm = req.query.q
+    console.log('req.query : ' , req.query)
+    console.log(searchTerm)
     try{
         await mongoClient.connect();
-        const db = mongoClient.db('movie-reservation-system')
+        const db = mongoClient.db(process.env.MOVIE_RESERVATION_DB)
 
         // search in movie_info 
         await db.collection('movie_info').findOne({titleText : searchTerm}).then((movie) => {

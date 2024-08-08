@@ -1,4 +1,4 @@
-const createPath = require('../shared/createPath')
+const createPath = require('../utils/createPath')
 
 // logger
 const {logger : customLogger} = require('../logs/logger/logger.config')
@@ -6,8 +6,7 @@ const {logger : customLogger} = require('../logs/logger/logger.config')
 const apiType = 'auth'
 
 const authRegisterController = async (req , res) => {
-    const pathObj = {reqPath : req.path , apiType}
-    const newPath = createPath(pathObj)
+    const newPath = createPath(req.url , apiType)
     try{
         const response = await fetch(newPath , {
             method : "POST",
@@ -31,8 +30,7 @@ const authRegisterController = async (req , res) => {
 }
 
 const authLoginController = async (req , res) => {
-    const pathObj = {reqPath : req.path , apiType}
-    const newPath = createPath(pathObj)
+    const newPath = createPath(req.url , apiType)
     try{
         const response = await fetch(newPath , {
             method : 'POST',
@@ -51,8 +49,7 @@ const authLoginController = async (req , res) => {
 }
 
 const authRefreshTokenController = async(req , res) => {
-    const pathObj = {reqPath : req.path , apiType}
-    const newPath = createPath(pathObj)
+    const newPath = createPath(req.url , apiType)
     try{
         customLogger.info(`refresh token successful ${response.statys}` , 'server')
         res.send('authlogin controller')
@@ -62,4 +59,22 @@ const authRefreshTokenController = async(req , res) => {
     }
 }
 
-module.exports = {authRegisterController , authLoginController , authRefreshTokenController}
+const updatePasswordController = async(req , res) => {
+    const newPath = createPath(req.url , apiType)
+    try{
+        const response = await fetch(newPath , {
+            method : 'PATCH',
+            headers : {
+                'Content-Type' : 'application/json'
+            },
+            body : JSON.stringify(req.body)
+        })
+        const data = await response.json()
+        return res.status(response.status).json({message : data.message})
+    }catch(err){
+        customLogger.error(err , 'server')
+        res.status(500).send('Error in updatePasswordController in main server')
+    }
+}
+
+module.exports = {authRegisterController , authLoginController , authRefreshTokenController,  updatePasswordController}

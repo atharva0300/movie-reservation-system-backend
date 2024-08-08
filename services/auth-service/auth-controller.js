@@ -76,4 +76,35 @@ const refreshToken = async(req , res) => {
     res.status(200).json({message : 'inside refresk token controller'})
 }
 
-module.exports = {register , login , logout , refreshToken}
+const updatePassword = async(req, res) => {
+    const {userid , password} = req.body
+    console.log(userid)
+    console.log(password)
+    try{
+        const user = await pgPool.query('SELECT * FROM public."User" WHERE userid = $1' , [userid])
+        console.log(user)
+        if(user.rowCount == 1){
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password , salt);
+            try{
+                const updateResponse = await pgPool.query('UPDATE public."User" SET password = $1 WHERE userid = $2' , [hashedPassword , userid])
+                console.log(updateResponse)
+                if(updateResponse.rowCount == 1){
+                    customLogger.info('password updated' , 'auth')
+                    return res.status(200).json({message : 'password updated'})
+                }
+            }catch(err){
+                customLogger.error(err , 'auth')
+                return res.status(500).json({message : 'failed to update password'})
+            } 
+        }else{
+            customLogger.info('User with userid does not exist' , 'auth')
+            return res.status(400).json({message : 'User with userid does not exist'})
+        }
+    }catch(err){
+        customLogger.error(err , 'auth')
+        return res.status(500).json({message : 'updatePassword Error'})
+    }
+}
+
+module.exports = {register , login , logout , refreshToken , updatePassword}

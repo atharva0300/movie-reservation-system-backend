@@ -7,7 +7,7 @@ if (!fs.existsSync(logDir)) {
     fs.mkdirSync(logDir, { recursive: true });
 }
 
-const logsList = ['server' , 'booking',  'auth' , 'movie' , 'notification' , 'search' , 'user' , 'showtime' , 'general']
+const logsList = ['server' , 'booking',  'auth' , 'movie' , 'notification' , 'search' , 'user' , 'showtime' , 'comment' , 'theater' , 'offer' , 'general']
 
 const logTypes = (type) => {
     if(logsList.includes(type)){

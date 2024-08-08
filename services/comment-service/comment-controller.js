@@ -1,0 +1,128 @@
+const express = require('express')
+const { MongoClient } = require('mongodb')
+const dotenv = require('dotenv')
+const path = require('path')
+dotenv.config({path : path.resolve(__dirname , '../../.env')})
+
+// mongodb client 
+const mongoClient = new MongoClient(process.env.MONGO_URI)
+
+// logger 
+const {logger : customLogger} = require('../../logs/logger/logger.config')
+
+const createComment = async(req , res) => {
+    const newCommentObj = req.body
+    console.log(newCommentObj)
+    try{
+        await mongoClient.connect()
+        const db = mongoClient.db(process.env.MOVIE_RESERVATION_DB)
+        const commentResponse = await db.collection('comment').updateOne(
+            {movieId : newCommentObj.movieId },
+            {
+                $push : {
+                    comments : {
+                        userId : parseInt(newCommentObj.userId),
+                        comment : newCommentObj.comment
+                    }
+                }
+            }
+        )
+        console.log(commentResponse)
+        if(commentResponse){
+            customLogger.info('comment created' , 'comment')
+            return res.status(201).json({message : 'comment created'})
+        }else{
+            customLogger.error('failed to create comment' , 'comment')
+            return res.status(400).json({message : 'failed to create comment'})
+        }
+    }catch(err){
+        customLogger.error(err , 'comment')
+        return res.status(500).json({message : 'createComment error'})
+    }
+}
+
+/*
+{
+    movieId : 
+    comments : [
+        :index : {
+            userid : ,
+            comment :
+        }
+    ]
+}
+*/
+
+const getCommentsByMovie = async(req , res) => {
+    const {id : movieId } = req.params
+    try{
+        await mongoClient.connect()
+        const db = mongoClient.db(process.env.MOVIE_RESERVATION_DB)
+        const commentResponse = await db.collection('comment').findOne({movieId : movieId})
+        console.log(commentResponse)
+        if(commentResponse){
+            customLogger.info('found comment by movidId' , 'comment')
+            return res.status(201).json({message : 'found comment by movie id' , data : JSON.stringify(commentResponse.comments)})
+        }else{
+            customLogger.error('comment does not exist for the movie id' , 'comment')
+            return res.status(400).json({message : 'comment does not exist for the movie id'})
+        } 
+    }catch(err){
+        customLogger.error(err , 'comment')
+        return res.status(500).json({message : 'getCommentBymovie error'})
+    }
+}
+
+const updateComment = async(req , res) => {
+    const commentObj = req.body
+    const {id : movieId , userId} = req.params
+    console.log(movieId)
+    console.log(userId)
+    try{
+        await mongoClient.connect()
+        const db = mongoClient.db(process.env.MOVIE_RESERVATION_DB)
+        const commentResponse = await db.collection('comment').updateOne(
+            {movieId : movieId , 'comments.userId' : parseInt(userId)} , 
+            {$set : {
+                'comments.$.comment' : commentObj.comment
+            }}   
+        )
+        console.log(commentResponse)
+        if(commentResponse){
+            customLogger.info('comment updated' , 'comment')
+            return res.status(201).json({message : 'comment updated'})
+        }else{
+            customLogger.error('movie id does not exist for the comment updation' , 'comment')
+            return res.status(400).json({message : 'movie id does not exist fro the comment updation'})
+        } 
+    }catch(err){
+        customLogger.error(err , 'comment')
+        return res.status(500).json({message : 'updateComment error'})
+    }
+}
+
+const deleteComment = async(req , res ) => {
+    const {id : movieId , userId} = req.params
+    try{
+        await mongoClient.connect()
+        const db = mongoClient.db(process.env.MOVIE_RESERVATION_DB)
+        const commentResponse = await db.collection('comment').updateOne(
+            {movieId : movieId},
+            {
+                $pull : {
+                    comments : {
+                        userId : parseInt(userId)
+                    }
+                }
+            }
+        )
+        console.log(commentResponse)
+        customLogger.info('comment deleted' , 'comment')
+        return res.status(201).json({message : 'comment deleted'})
+    }catch(err){
+        customLogger.error(err , 'comment')
+        return res.status(500).json({message : 'delteComment error'})
+    }
+}
+
+module.exports = {createComment , getCommentsByMovie , updateComment , deleteComment}

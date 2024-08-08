@@ -1,5 +1,5 @@
 const express = require('express');
-const createPath = require('../shared/createPath');
+const createPath = require('../utils/createPath');
 
 const apiType = 'slots'
 
@@ -7,12 +7,7 @@ const apiType = 'slots'
 const { logger : customLogger} = require('../logs/logger/logger.config')
 
 const slotTheaterController = async(req , res) => {
-    const pathObj = {
-        reqPath : req.path,
-        apiType,
-        query : theaterName
-    }
-    const newPath = createPath(pathObj)
+    const newPath = createPath(req.url , apiType)
     try{
 
         const response = await fetch(newPath , {
@@ -33,12 +28,7 @@ const slotTheaterController = async(req , res) => {
 
 
 const slotMovieController = async(req , res) => {
-    const pathObj = {
-        reqPath : req.path,
-        apiType,
-        query : movieId
-    }
-    const newPath = createPath(pathObj)
+    const newPath = createPath(req.url , apiType)
     try{
         const response = await fetch(newPath , {
             method : 'GET',

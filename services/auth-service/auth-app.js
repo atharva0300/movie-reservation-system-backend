@@ -8,7 +8,7 @@ dotenv.config({path : path.resolve(__dirname , '../../.env')})
 const AUTH_PORT = process.env.AUTH_PORT
 
 // controllers 
-const { register, login, refreshToken, logout } = require('./auth-controller')
+const { register, login, refreshToken, logout, updatePassword } = require('./auth-controller')
 const { logger : customLogger } = require('../../logs/logger/logger.config')
 
 const app = express();
@@ -24,6 +24,8 @@ app.post('/login' , login)
 app.post('/logout' , logout)
 
 app.post('/refresh-token' , refreshToken)
+
+app.patch('/update-password' , updatePassword)
 
 
 const authStarter = async() => {

@@ -10,8 +10,7 @@ const imdbTitleIds = [
 // const mongoClient = require('../config/mongoClientConfig')
 const {MongoClient} = require('mongodb')
 const dotenv = require('dotenv')
-const path = require('path')
-dotenv.config({path : path.resolve(__dirname , '../.env')})
+dotenv.config()
 console.log(process.env.MONGO_URI.toString())
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -90,7 +89,7 @@ const makeReq = async(req , res) => {
           }
         
         
-        const database = mongoClient.db("movie-reservation-system")
+        const database = mongoClient.db(process.env.MOVIE_RESERVATION_DB)
 
         const movieCollection = database.collection('movie_info')
         const castCollection = database.collection('cast')
@@ -133,7 +132,7 @@ const makeReq = async(req , res) => {
 
 async function makeDummyReq(){
   await mongoClient.connect()
-  db = mongoClient.db('movie-reservation-system')
+  db = mongoClient.db(process.env.MOVIE_RESERVATION_DB)
   const movieCollection = db.collection('movie_info')
   const result = await movieCollection.find({}).toArray()
   console.log('result : ' , result)

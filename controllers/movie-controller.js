@@ -1,5 +1,5 @@
 const express = require('express')
-const createPath = require('../shared/createPath')
+const createPath = require('../utils/createPath')
 
 const apiType = 'movies'
 
@@ -9,8 +9,7 @@ const {logger : customLogger} = require('../logs/logger/logger.config')
 
 // get all movies
 const getAllMovies = async (req , res) => {  
-    const pathObject = {reqPath : req.path, apiType : 'movies'}
-    const newPath = createPath(pathObject)
+    const newPath = createPath(req.url , apiType)
         try{
             const response =  await fetch(newPath , {
                 method : 'GET',
@@ -20,7 +19,7 @@ const getAllMovies = async (req , res) => {
             })
             const data = await response.json()
             customLogger.info(`get all movies successful ${response.status}` , 'server')
-            return res.status(response.status).json({message : data.message})
+            return res.status(response.status).json({message : data.message , data : data.data })
         }catch(err){
             console.log('err : ' , err)
             customLogger.error(err , 'server')
@@ -30,8 +29,7 @@ const getAllMovies = async (req , res) => {
 
 // add a new movie 
 const addSingleMovie = async(req , res) => {
-    const pathObj = {reqPath : req.path , apiType}
-    const newPath = createPath(pathObj)
+    const newPath = createPath(req.url , apiType)
     try{
         const response = await fetch(newPath , {
             method : 'POST',
@@ -52,9 +50,7 @@ const addSingleMovie = async(req , res) => {
 
 // get movie details by id
 const getSingleMovie = async(req , res) => {
-    console.log(req.params)
-    const pathObj = {reqPath : req.path , apiType}
-    const newPath =  createPath(pathObj)
+    const newPath =  createPath(req.url , apiType)
     try{
         const response = await fetch(newPath , {
             method : 'GET',
@@ -80,15 +76,15 @@ const getSingleMovie = async(req , res) => {
 
 // update movie details
 const updateSingleMovie = async(req , res) => {
-    const pathObj = {reqPath : req.path , apiType}
-    const newPath =  createPath(pathObj)
+    const newPath =  createPath(req.url , apiType)
+    console.log(req.body)
     try{
         const response = await fetch(newPath , {
             method : 'PUT',
             headers : {
                 'Content-Type' : 'application/json'
             },
-            data : req.body
+            body : JSON.stringify(req.body)
         })
         const data = await response.json();
         customLogger.info(`update single movie successful ${response.status}` , 'server')
@@ -102,8 +98,7 @@ const updateSingleMovie = async(req , res) => {
 
 // delete single movie
 const deleteSingleMovie = async(req , res) => {
-    const pathObj = {reqPath : req.path , apiType}
-    const newPath =  createPath(pathObj)
+    const newPath =  createPath(req.url , apiType)
     try{
         const response = await fetch(newPath , {
             method : 'DELETE',

@@ -1,6 +1,6 @@
 const express = require('express')
 const dotenv = require('dotenv');
-const { getAllMovies, insertSingleMovie, getSingleMovie } = require('./movie-controller');
+const { getAllMovies, insertSingleMovie, getSingleMovie, deleteSingleMovie, updateSingleMovie } = require('./movie-controller');
 dotenv.config()
 
 const MOVIE_PORT = process.env.MOVIE_PORT
@@ -11,11 +11,15 @@ const app = express();
 app.use(express.json())
 
 // routes
-app.get('/' , getAllMovies)
+app.get('/' , getAllMovies) // get all movies
 
-app.post('/' , insertSingleMovie)
+app.post('/' , insertSingleMovie)   // add a single movie ( admin only )
 
-app.get('/:id' , getSingleMovie)
+app.get('/:id' , getSingleMovie)    // get single movie by id
+
+app.delete('/:id' , deleteSingleMovie)  // delete single movie ( admin only )
+
+app.put('/:table' , updateSingleMovie)    // update single movie (admin only )
 
 
 
