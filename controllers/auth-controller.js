@@ -17,16 +17,16 @@ const authRegisterController = async (req , res) => {
         })
         const data = await response.json();
     
-        if(data.code!='authCode0'){
-            customLogger.error(data , 'auth')
-            return res.status(400).json({message : data.message})
+        if(response.status!=201){
+            customLogger.error(data.message , 'auth')
+            return res.status(response.status).json({message : data.message})
         }
         
         customLogger.info(`user registered successfully ${response.status}` , 'server')
         return res.status(response.status).json({message : data.message})
     }catch(err){
         customLogger.error(err , 'server')
-        return res.status(500).send('Error in auth , ' , err)
+        return res.status(500).json({message : err.message})
     }
 }
 
@@ -46,7 +46,7 @@ const authLoginController = async (req , res) => {
         return res.status(response.status).json({message : data.message , data : data.data})
     }catch(err){
         customLogger.error(err , 'server')
-        res.status(500).send('Error in auth')
+        res.status(500).json({message : err.message})
     }
 }
 
@@ -68,7 +68,7 @@ const authRefreshTokenController = async (req , res) => {
     }catch(err){
         console.log('err : ' , err)
         customLogger.error(err , 'server')
-        return res.status(500).json({message : 'Error in Auth'})
+        return res.status(500).json({message : err.message})
     }
 }
 
@@ -86,7 +86,7 @@ const updatePasswordController = async(req , res) => {
         return res.status(response.status).json({message : data.message})
     }catch(err){
         customLogger.error(err , 'server')
-        res.status(500).send('Error in updatePasswordController in main server')
+        res.status(500).json({message : 'Error in updatePasswordController'})
     }
 }
 
