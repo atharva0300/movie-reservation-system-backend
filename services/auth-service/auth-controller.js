@@ -54,7 +54,17 @@ const login = async(req , res) => {
     const {email , password} = req.body
     try{
         const user = await pgPool.query('SELECT * FROM public."User" WHERE email = $1' , [email])
+        if(user.rowCount == 0){
+            // the user does not exists in the database
+            customLogger.error('User does not exists' , 'auth')
+            return res.status(400).json({message : 'User does not exists' , 'code' : 'loginCode1'})
+        }
         const isMatch = await bcrypt.compare(password , user.rows[0].password)
+        if(user.rowCount == 1 && !isMatch){
+            // user exists but incorrect password
+            customLogger.error('Invalid credentials' , 'auth')
+            return res.status(400).json({message : 'Invalid credentials' , 'code' : 'loginCode2'})
+        }
         if(user.rowCount == 1 && isMatch){
             const userName = user.rows[0].name
             const userEmail = user.rows[0].email
@@ -63,7 +73,7 @@ const login = async(req , res) => {
                 const accessToken = jwt.sign(
                     {"useremail" : userEmail , "role" : user.rows[0].role},
                     process.env.ACCESS_TOKEN_SECRET,
-                    { expiresIn : '1m' } 
+                    { expiresIn : '5m' } 
                 )
                 const refreshToken = jwt.sign(
                     {"useremail" : userEmail , "role" : user.rows[0].role},
@@ -82,11 +92,11 @@ const login = async(req , res) => {
                 
             }catch(err){
                 console.log('err : ' , err)
-                customLogger.error(err , 'auth')
+                customLogger.error('err' , 'auth')
                 return res.status(500).json({message : JSON.stringify(err.message)})
             }
         }else{
-            customLogger.error(err , 'auth')
+            customLogger.error('User does not exists' , 'auth')
             return res.status(400).json({message : 'User does not exists' , 'code' : 'loginCode1'})
         }
 
@@ -150,7 +160,7 @@ const refreshToken = async(req , res) => {
                     const accessToken = jwt.sign(
                         {"useremail" : result.rows[0].email , "role" : result.rows[0].role },
                         process.env.ACCESS_TOKEN_SECRET,
-                        { expiresIn : '1m'}
+                        { expiresIn : '5m'}
                     );
                     customLogger.info('access token refreshed' , 'auth')
                     res.status(200).json({message : 'access token refreshed' , data : accessToken})
