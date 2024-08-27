@@ -3,3 +3,4 @@ node_modules
 */.env
 logs/*.txt
 files/ticket-pdfs/*.pdf
+*.rdb
