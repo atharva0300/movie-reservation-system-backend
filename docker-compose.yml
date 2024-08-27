@@ -1,0 +1,131 @@
+version: '3'
+services: 
+  app: 
+    build: .
+  
+  redis: 
+    image: redis
+    restart: always
+    env_file:
+      - ./.env
+
+  postgres: 
+    image: postgres 
+    env_file:
+      - ./.env
+    environment:
+      - POSTGRES_USER=$PG_USER
+      - POSTGRES_PASSWORD=$PG_PASSWORD
+      - POSTGRES_DB=$PG_DATABASE
+    ports: 
+      - $PG_PORT:$PG_PORT
+    volumes: 
+      - db:/var/lib/postgres
+
+  rabbitmq: 
+    image: rabbitmq
+
+  auth-service: 
+    depends_on:
+        - postgres
+    build: ./services/auth-service
+    env_file:
+      - ./.env
+    ports: 
+      - "3007:3007"
+    links:
+      - postgres
+    
+    volumes: 
+      - ./services/auth-service:/auth-service
+      - /auth-service/node_modules
+    stdin_open: true
+    tty: true
+    
+  
+  booking-service: 
+    build: ./services/booking-service
+    ports: 
+      - "3004:3004"
+    volumes: 
+      - ./services/booking-service:/app/services/booking-service
+      - /app/node_modules
+    env_file:
+      - ./.env
+
+  comment-service: 
+    build: ./services/comment-service
+    ports: 
+      - "3010:3010"
+    volumes: 
+      - ./services/comment-service:/app/services/comment-service
+      - /app/node_modules
+    env_file:
+      - ./.env
+
+  movie-service: 
+    build: ./services/movie-service
+    ports: 
+      - "3002:3002"
+    volumes: 
+      - ./services/movie-service:/app/services/movie-service
+      - /app/node_modules
+    env_file:
+      - ./.env
+
+  offer-service: 
+    build: ./services/offer-service
+    ports: 
+      - "3009:3009"
+    volumes: 
+      - ./services/offer-service:/app/services/offer-service
+      - /app/node_modules
+    env_file:
+      - ./.env
+
+  search-service: 
+    build: ./services/search-service
+    ports: 
+      - "3003:3003"
+    volumes: 
+      - ./services/search-service:/app/services/search-service
+      - /app/node_modules
+    env_file:
+      - ./.env
+
+  showtime-service: 
+    build: ./services/showtime-service
+    ports: 
+      - "3005:3005"
+    volumes: 
+      - ./services/showtime-service:/app/services/showtime-service
+      - /app/node_modules
+    env_file:
+      - ./.env
+
+  theater-service: 
+    build: ./services/theater-service
+    ports: 
+      - "3008:3008"
+    volumes: 
+      - ./services/theater-service:/app/services/theater-service
+      - /app/node_modules
+    env_file:
+      - ./.env
+
+  user-service: 
+    build: ./services/user-service
+    ports: 
+      - "3001:3001"
+    volumes: 
+      - ./services/user-service:/app/services/user-service
+      - /app/node_modules
+    env_file:
+      - ./.env
+  
+volumes: 
+  db: 
+
+networks:
+  mrs-network:
+    external: true

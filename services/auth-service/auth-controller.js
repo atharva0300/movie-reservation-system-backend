@@ -5,10 +5,10 @@ const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
 
 // pgclient 
-const pgPool = require('../../config/pgPoolConfig')
+const pgPool = require('./config/pgPoolConfig')
 
 // logger
-const { logger : customLogger } = require('../../logs/logger/logger.config')
+const { logger : customLogger } = require('./logger/logger.config')
 
 const extractJWTCookieValue = (cookieHeader) => {
     if (cookieHeader) {
@@ -25,7 +25,7 @@ const extractJWTCookieValue = (cookieHeader) => {
 
 const register = async(req , res) => {
     const {name , email , password , role } = req.body
-
+    await pgPool.connect()
     try{
         const existingUser = await pgPool.query('SELECT * FROM public."User" WHERE email = $1' , [email])
         if(existingUser.rowCount!=0){

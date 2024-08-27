@@ -5,7 +5,8 @@
   "main": "search-app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev" : "nodemon search-app"
+    "dev" : "nodemon search-app",
+    "start" : "node search-app"
   },
   "author": "",
   "license": "ISC"

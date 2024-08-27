@@ -2,7 +2,6 @@ const dotenv = require('dotenv')
 const path = require('path')
 const { MongoClient } = require('mongodb')
 dotenv.config({path : path.resolve(__dirname , '../../.env')})
-const {createClient} = require('redis')
 
 // clients
 const mongoClient = new MongoClient(process.env.MONGO_URI)

@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev" : "nodemon comment-app"
+    "dev" : "nodemon comment-app",
+    "start" : "node comment-app"
   },
   "author": "",
   "license": "ISC"

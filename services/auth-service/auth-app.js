@@ -1,7 +1,7 @@
 const express = require('express')
 const dotenv = require('dotenv')
 const path = require('path')
-const pgPool = require('../../config/pgPoolConfig')
+const pgPool = require('./config/pgPoolConfig')
 dotenv.config({path : path.resolve(__dirname , '../../.env')})
 const cors = require('cors')
 
@@ -10,7 +10,7 @@ const AUTH_PORT = process.env.AUTH_PORT
 
 // controllers 
 const { register, login, refreshToken, logout, updatePassword } = require('./auth-controller')
-const { logger : customLogger } = require('../../logs/logger/logger.config')
+const { logger : customLogger } = require('./logger/logger.config')
 
 const app = express();
 
@@ -44,4 +44,8 @@ const authStarter = async() => {
     }
 }
 
-authStarter()
+// authStarter()
+
+app.listen(AUTH_PORT , () => {
+    console.log('Auth server listening to PORT : ' , AUTH_PORT)
+})

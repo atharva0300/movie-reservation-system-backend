@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev" : "nodemon theater-app"
+    "dev" : "nodemon theater-app",
+    "start" : "node theater-app"
   },
   "author": "",
   "license": "ISC"
