@@ -1,10 +1,10 @@
 const express = require('express')
 
 // logger 
-const {logger : customLogger} = require('../../logs/logger/logger.config')
+const {logger : customLogger} = require('./logger/logger.config')
 
 // pgclient 
-const pgPool = require('../../config/pgPoolConfig')
+const pgPool = require('./config/pgPoolConfig')
 
 
 const getOfferDiscount = async(req , res ) => {

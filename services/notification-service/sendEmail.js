@@ -1,7 +1,5 @@
 const nodemailer = require('nodemailer')
-const dotenv = require('dotenv')
 const path = require('path')
-dotenv.config({path : path.resolve(__dirname , './.env')})
 
 const transporter = nodemailer.createTransport({
     service : 'Outlook365',

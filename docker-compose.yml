@@ -1,16 +1,16 @@
 version: '3'
 services: 
-  app: 
-    build: .
-  
   redis: 
     image: redis
-    restart: always
+    container_name: redis_db
     env_file:
       - ./.env
+    networks:
+      - mrs-network
 
   postgres: 
     image: postgres 
+    container_name: postgres_db 
     env_file:
       - ./.env
     environment:
@@ -20,12 +20,18 @@ services:
     ports: 
       - $PG_PORT:$PG_PORT
     volumes: 
-      - db:/var/lib/postgres
+      - ./postgres/data:/var/lib/postgres/data
+      - ./scripts/mrs-init.sql:/docker-entrypoint-initdb.d/mrs-init.sql
+    networks: 
+      - mrs-network
 
   rabbitmq: 
     image: rabbitmq
+    networks: 
+      - mrs-network
 
   auth-service: 
+    container_name: 'mrs-auth'
     depends_on:
         - postgres
     build: ./services/auth-service
@@ -41,9 +47,14 @@ services:
       - /auth-service/node_modules
     stdin_open: true
     tty: true
+    networks: 
+      - mrs-network
     
   
   booking-service: 
+    container_name: 'mrs-booking'
+    depends_on:
+      - postgres
     build: ./services/booking-service
     ports: 
       - "3004:3004"
@@ -52,8 +63,14 @@ services:
       - /app/node_modules
     env_file:
       - ./.env
+    networks: 
+      - mrs-network
+    
 
   comment-service: 
+    container_name: 'mrs-comment'
+    depends_on:
+      - postgres
     build: ./services/comment-service
     ports: 
       - "3010:3010"
@@ -62,8 +79,15 @@ services:
       - /app/node_modules
     env_file:
       - ./.env
+    networks: 
+      - mrs-network
+    
 
   movie-service: 
+    container_name: 'mrs-movie'
+    depends_on:
+      - postgres
+      - redis
     build: ./services/movie-service
     ports: 
       - "3002:3002"
@@ -72,8 +96,14 @@ services:
       - /app/node_modules
     env_file:
       - ./.env
+    networks: 
+      - mrs-network
+     
 
   offer-service: 
+    container_name: 'mrs-offer'
+    depends_on:
+      - postgres
     build: ./services/offer-service
     ports: 
       - "3009:3009"
@@ -82,8 +112,13 @@ services:
       - /app/node_modules
     env_file:
       - ./.env
+    networks: 
+      - mrs-network
 
   search-service: 
+    container_name: 'mrs-search'
+    depends_on:
+      - postgres
     build: ./services/search-service
     ports: 
       - "3003:3003"
@@ -92,8 +127,13 @@ services:
       - /app/node_modules
     env_file:
       - ./.env
+    networks: 
+      - mrs-network
 
   showtime-service: 
+    container_name: 'mrs-showtime'
+    depends_on:
+      - postgres
     build: ./services/showtime-service
     ports: 
       - "3005:3005"
@@ -102,8 +142,14 @@ services:
       - /app/node_modules
     env_file:
       - ./.env
+    networks: 
+      - mrs-network
 
   theater-service: 
+    container_name: 'mrs-theater'
+    depends_on:
+      - postgres
+      - redis
     build: ./services/theater-service
     ports: 
       - "3008:3008"
@@ -112,8 +158,13 @@ services:
       - /app/node_modules
     env_file:
       - ./.env
+    networks: 
+      - mrs-network
 
   user-service: 
+    container_name: 'mrs-user'
+    depends_on:
+      - postgres
     build: ./services/user-service
     ports: 
       - "3001:3001"
@@ -122,9 +173,9 @@ services:
       - /app/node_modules
     env_file:
       - ./.env
+    networks: 
+      - mrs-network
   
-volumes: 
-  db: 
 
 networks:
   mrs-network:

@@ -1,11 +1,8 @@
-const express = require('express')
 const amqp = require('amqplib')
-const dotenv = require('dotenv')
-dotenv.config()
 
 const {TICKET_EXCHANGE_NAME , TICKET_NOTIFICATION_ROUTING_KEY , TICKET_NOTIFICAITON_QUEUE} = require('../conifg/rabbitmq.config')
 
-const {logger : customLogger} = require('../../../logs/logger/logger.config')
+const {logger : customLogger} = require('../logger/logger.config')
 
 const { sendTicketToEmail } = require('../utils/sendTicketToEmail')
  
@@ -13,7 +10,7 @@ const { sendTicketToEmail } = require('../utils/sendTicketToEmail')
 const consumeTicket = async () => {
     console.log('waiting for messages...')
     try{
-        const connection = await amqp.connect(`amqp://localhost:${process.env.DOCKER_RABBITMQ_PORT}`)
+        const connection = await amqp.connect(`amqp://${process.env.RABBITMQ_DOCKER_HOST}:${process.env.RABBITMQ_DOCKER_PORT}`)
         const channel = await connection.createChannel()
     
         channel.assertExchange(TICKET_EXCHANGE_NAME , 'topic' , {durable : true})

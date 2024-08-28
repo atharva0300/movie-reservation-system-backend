@@ -1,12 +1,8 @@
-const express = require('express')
-const dotenv = require('dotenv')
-dotenv.config()
-
 // db clients 
-const pgPool = require('../../config/pgPoolConfig')
+const pgPool = require('./config/pgPoolConfig')
 
 // logger 
-const {logger : customLogger} = require('../../logs/logger/logger.config')
+const {logger : customLogger} = require('./logger/logger.config')
 
 
 const slotByTheaterController = async(req , res) => {

@@ -1,8 +1,6 @@
 const express = require('express')
-const dotenv = require('dotenv');
 const path = require('path')
 const { bookBulkTicketController } = require('./booking-controller');
-dotenv.config({path : path.resolve(__dirname , '../../.env')})
 
 const BOOKING_PORT = process.env.BOOKING_PORT
 

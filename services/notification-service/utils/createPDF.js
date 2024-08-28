@@ -5,7 +5,7 @@ const { v4: uuid4 } = require('uuid');
 const fsPromises = require('fs').promises
 
 // logger 
-const {logger : customLogger} = require('../../../logs/logger/logger.config')
+const {logger : customLogger} = require('../logger/logger.config')
 
 const checkTicketPdfDir = (targetDir) => {
     return myPromise = new Promise((resolve , reject) => {
@@ -27,7 +27,7 @@ const checkTicketPdfDir = (targetDir) => {
 
 // Function to create the PDF
 const createTicketPDF = (data) => {
-    const targetDirPath = path.resolve(__dirname, '../../../files/ticket-pdfs/');
+    const targetDirPath = path.resolve(__dirname, '../files/ticket-pdfs/');
     return new Promise((resolve , reject) => {
         checkTicketPdfDir(targetDirPath).then((value) => {
             // target dir has been created or already exists

@@ -9,8 +9,6 @@ const imdbTitleIds = [
 
 // const mongoClient = require('../config/mongoClientConfig')
 const {MongoClient} = require('mongodb')
-const dotenv = require('dotenv')
-dotenv.config()
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const mongoClient = new MongoClient(process.env.MONGO_URI.toString());

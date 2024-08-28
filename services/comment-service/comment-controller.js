@@ -1,14 +1,12 @@
 const express = require('express')
 const { MongoClient } = require('mongodb')
-const dotenv = require('dotenv')
 const path = require('path')
-dotenv.config({path : path.resolve(__dirname , '../../.env')})
 
 // mongodb client 
 const mongoClient = new MongoClient(process.env.MONGO_URI)
 
 // logger 
-const {logger : customLogger} = require('../../logs/logger/logger.config')
+const {logger : customLogger} = require('./logger/logger.config')
 
 const createComment = async(req , res) => {
     const newCommentObj = req.body

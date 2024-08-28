@@ -1,7 +1,5 @@
 const express = require('express')
-const dotenv = require('dotenv')
 const { slotByTheaterController, slotByMovieController } = require('./showtime-controller');
-dotenv.config()
 const app = express();
 
 // port 

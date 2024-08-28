@@ -1,9 +1,9 @@
 
 // logger
-const {logger : customLogger} = require('../../logs/logger/logger.config')
+const {logger : customLogger} = require('./logger/logger.config')
 
 // pg client 
-const pgPool = require('../../config/pgPoolConfig')
+const pgPool = require('./config/pgPoolConfig')
 
 const updateUserName = async (req , res ) => {
     const {username , email} = req.body

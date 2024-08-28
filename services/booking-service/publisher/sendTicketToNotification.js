@@ -1,18 +1,14 @@
-const express = require('express')
-const dotenv = require('dotenv')
-const path =  require('path')
-dotenv.config({path : path.resolve(__dirname , '../../../.env')})
 const amqp = require('amqplib')
 
 // logger
-const {logger : customLogger} = require('../../../logs/logger/logger.config')
+const {logger : customLogger} = require('../logger/logger.config.js')
 
 // import routing information
 const {EXCHANGE_NAME, TICKET_NOTIFICAITON_QUEUE, TICKET_NOTIFICATION_ROUTING_KEY} = require('../config/rabbitmq.config.js')
 
 const sendTicketToNotification = async(ticket) =>{
     try{
-        const connection = await amqp.connect(`amqp://localhost:${process.env.DOCKER_RABBITMQ_PORT}`)
+        const connection = await amqp.connect(`amqp://${process.env.RABBITMQ_DOCKER_HOST}:${process.env.RABBITMQ_DOCKER_PORT}`)
         const channel = await connection.createChannel()
         channel.assertExchange(EXCHANGE_NAME , 'topic',  {durable : true})
         channel.assertQueue(TICKET_NOTIFICAITON_QUEUE , {durable : true})

@@ -1,14 +1,12 @@
-const dotenv = require('dotenv')
 const {MongoClient} = require('mongodb')
 const path = require('path')
-dotenv.config({path : path.resolve(__dirname , '../../.env')})
 
 // db clients
 const mongoClient = new MongoClient(process.env.MONGO_URI.toString())
-const pgPool = require('../../config/pgPoolConfig')
+const pgPool = require('./config/pgPoolConfig')
 
 // logger 
-const {logger : customLogger} = require('../../logs/logger/logger.config')
+const {logger : customLogger} = require('./logger/logger.config')
 
 const searchMovieController = async(req , res , next) => {
     const searchTerm = req.query.q

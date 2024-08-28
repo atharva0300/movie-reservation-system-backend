@@ -1,14 +1,12 @@
-const dotenv = require('dotenv')
 const path = require('path')
 const { MongoClient } = require('mongodb')
-dotenv.config({path : path.resolve(__dirname , '../../.env')})
 
 // clients
 const mongoClient = new MongoClient(process.env.MONGO_URI)
-const redisClient = require('../../config/redisConfig')
+const redisClient = require('./config/redisConfig')
 
 // logger
-const {logger : customLogger} = require('../../logs/logger/logger.config')
+const {logger : customLogger} = require('./logger/logger.config')
 
 
 const getSingleMovie = async(req , res) => {

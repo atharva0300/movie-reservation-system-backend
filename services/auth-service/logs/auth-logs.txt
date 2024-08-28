@@ -11,3 +11,13 @@
 2024-08-27T18:13:31.414Z [ERROR]: Error: connect ECONNREFUSED 127.0.0.1:5432
 2024-08-27T18:13:41.622Z [ERROR]: Error: connect ECONNREFUSED 127.0.0.1:5432
 2024-08-27T18:23:51.096Z [ERROR]: error: relation "public.User" does not exist
+2024-08-28T03:57:22.815Z [ERROR]: error: relation "public.User" does not exist
+2024-08-28T03:59:29.400Z [ERROR]: error: relation "public.User" does not exist
+2024-08-28T13:06:22.880Z [ERROR]: error: relation "public.User" does not exist
+2024-08-28T13:30:38.754Z [ERROR]: error: relation "public.User" does not exist
+2024-08-28T13:32:34.406Z [INFO]: Inserted new user into table
+2024-08-28T14:59:42.422Z [INFO]: Inserted new user into table
+2024-08-28T14:59:47.722Z [INFO]: User email already exists
+2024-08-28T15:13:41.697Z [INFO]: User email already exists
+2024-08-28T15:14:03.067Z [INFO]: User email already exists
+2024-08-28T15:23:22.770Z [INFO]: login successful

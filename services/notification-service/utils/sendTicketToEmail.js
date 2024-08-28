@@ -1,7 +1,7 @@
 const {transporter} = require('../sendEmail')
 const {mailOptions} = require('../mailOptions')
 const {v4 : uuid4} = require('uuid')
-const {createTicketPDF} = require('./../utils/createPDF')
+const {createTicketPDF} = require('./createPDF')
 
 const sendTicketToEmail = async (data) => {
     try{

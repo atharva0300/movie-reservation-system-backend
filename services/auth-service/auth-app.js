@@ -1,8 +1,6 @@
 const express = require('express')
-const dotenv = require('dotenv')
 const path = require('path')
 const pgPool = require('./config/pgPoolConfig')
-dotenv.config({path : path.resolve(__dirname , '../../.env')})
 const cors = require('cors')
 
 // config 

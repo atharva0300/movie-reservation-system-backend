@@ -1,8 +1,6 @@
 const express = require('express')
-const dotenv = require('dotenv')
 const path  =require('path')
 const { getOfferDiscount } = require('./offer-controller')
-dotenv.config({path : path.resolve(__dirname , '../../.env')})
 
 const app = express()
 

@@ -3,9 +3,9 @@ const {v4 : uuid4} = require('uuid')
 
 
 // db client 
-const pgPool = require('../../config/pgPoolConfig');
+const pgPool = require('./config/pgPoolConfig');
 const { sendTicketToNotification } = require('./publisher/sendTicketToNotification');
-const {logger : customLogger} = require('../../logs/logger/logger.config')
+const {logger : customLogger} = require('./logger/logger.config')
 
 
 /*

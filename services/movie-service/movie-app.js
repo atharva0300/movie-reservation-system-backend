@@ -1,7 +1,5 @@
 const express = require('express')
-const dotenv = require('dotenv');
 const { getAllMovies, insertSingleMovie, getSingleMovie, deleteSingleMovie, updateSingleMovie } = require('./movie-controller');
-dotenv.config()
 
 const MOVIE_PORT = process.env.MOVIE_PORT
 

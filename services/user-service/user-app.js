@@ -1,8 +1,5 @@
 const express = require('express')
-const dotenv = require('dotenv');
 const { updateUserName } = require('./user-controller');
-const { StepPage } = require('twilio/lib/rest/studio/v1/flow/engagement/step');
-dotenv.config()
 
 const USER_PORT = process.env.USER_PORT
 

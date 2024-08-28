@@ -1,11 +1,11 @@
 const express = require('express')
 
 // logger 
-const {logger : customLogger} = require('../../logs/logger/logger.config')
+const {logger : customLogger} = require('./logger/logger.config')
 
 // client 
-const pgPool = require('../../config/pgPoolConfig')
-const redisClient = require('../../config/redisConfig')
+const pgPool = require('./config/pgPoolConfig')
+const redisClient = require('./config/redisConfig')
 
 
 const getAllTheaters = async(req , res) => {
